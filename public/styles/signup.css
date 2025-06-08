@@ -1,0 +1,139 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#container1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+/* #container1 h2{
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 2.5rem;
+    color: #4A513F;
+} */
+
+nav{
+    background-color: #4A513F;
+    padding: 10px;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    gap:15px;
+    height: fit-content;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;   
+}
+
+nav h1{
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+nav h1:hover{
+    cursor: pointer;
+}
+
+#tree{
+    display: inline;
+    height:60px;
+    transform: translateY(-5px);
+  
+}
+
+#person{
+    height: 50px;
+}
+
+#person:hover{
+    cursor: pointer;
+}
+
+
+form{
+    font-family: "Alatsi", sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #C0C1BD;
+    padding: 25px;
+    margin-top: 40px;
+    padding-left: 50px;
+    padding-right: 50px;
+    box-shadow: 5px 5px #8D8D8D;
+
+}
+
+form h1{
+    text-align: center;
+    font-weight: 800;
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+.inputs input{
+    height: 50px;
+    width: 300px;
+    padding:10px;
+    border-radius: 10px;
+    border:none;
+    color: #7D7D7D;
+    font-weight: 790;
+
+}
+
+form p{
+    font-size: 0.7rem;
+    margin-top: 5px;
+    color: #4A513F;
+}
+form p:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#submit{
+    background-color: #4A513F;
+    font-size: 1.3rem;
+    color: white;
+    border: none;
+    width: fit-content;
+    align-self: center;
+    padding: 10px;
+    padding-left:20px;
+    padding-right: 20px;
+    border-radius:  30px;
+}
+
+#haveAccount{
+    font-family: "Alatsi", sans-serif;
+
+}
+
+#loginLink:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#mantra{
+    font-family: "Alatsi", sans-serif;
+    color: #4A513F;
+    font-size: 2rem;
+    margin-top: 20px;
+    font-weight: bold;
+}

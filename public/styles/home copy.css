@@ -1,0 +1,88 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#container1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+#container1 h2{
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 2.5rem;
+    color: #4A513F;
+}
+
+nav{
+    background-color: #4A513F;
+    padding: 10px;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    gap:15px;
+    height: fit-content;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;   
+}
+
+nav h1{
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+nav h1:hover{
+    cursor: pointer;
+}
+
+#tree{
+    display: inline;
+    height:60px;
+    transform: translateY(-5px);
+  
+}
+
+#person{
+    height: 50px;
+}
+
+#person:hover{
+    cursor: pointer;
+}
+
+#leaf{
+    margin-top: 100px;
+}
+#new-leaf-btn{
+    background-color: #4A513F;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    height: fit-content;
+    font-size: 1.5rem;
+    padding: 15px;
+    padding-right: 50px;
+    border-radius: 15px;
+    margin-top: 25px;
+    position:relative;
+
+    
+}
+
+#plus-btn{
+    position: absolute;
+    width: 32px;
+    right: 10px;
+    top:17px;
+}
+
