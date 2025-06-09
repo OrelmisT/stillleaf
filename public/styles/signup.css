@@ -137,3 +137,16 @@ form p:hover{
     margin-top: 20px;
     font-weight: bold;
 }
+
+.error{
+    background-color: rgb(228, 126, 126);
+    padding: 10px;
+    padding-right: 40px;
+    color: white;
+    position: relative;
+}
+
+
+#close:hover{
+    cursor: pointer;
+}

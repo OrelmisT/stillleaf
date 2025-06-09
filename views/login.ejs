@@ -18,8 +18,8 @@
         <form method="POST" style="margin-top: 100px;">
             <h1>Login</h1>
             <div class="inputs">
-                <input required type="email" placeholder="Enter Your Email" name="email">
-                <input required type="password" placeholder="Enter Your Password" name="password">
+                <input required type="email" placeholder="Enter Your Email" value="<%= locals.email ? email : ''%>" name="email">
+                <input required type="password" placeholder="Enter Your Password" value="<%= locals.password ? password : ''%>" name="password">
             </div>
             <p>Forgot your password?</p>
             <button type="submit" id="submit">LOGIN</button>
@@ -27,7 +27,7 @@
         <p style="margin-top: 20px;" id="noAccount">Don't have an account? <span id="signUpLink" style="color: #436908;">Sign up</span></p>
         <p id="mantra">Reflect. Grow. Prosper.</p>
         <% if (locals.errorMessage) {%>
-            <div class="error"> <%= errorMessage %> </div>
+            <div class="error"> <%= errorMessage %>  <img id="close" style="position:absolute; right: 10px; width: 20px; top: 13px;" src="close.png"></img></div>
         <%}%>
 	</div>
 

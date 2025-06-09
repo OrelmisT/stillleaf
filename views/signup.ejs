@@ -27,7 +27,7 @@
         <p style="margin-top: 20px;" id="haveAccount">Already have an account? <span id="loginLink" style="color: #436908;">Login</span></p>
         <p id="mantra">Reflect. Grow. Prosper.</p>
         <% if (locals.errorMessage) {%>
-            <div class="error"> <%= errorMessage %> </div>
+            <div class="error"> <%= errorMessage %>  <img id="close" style="position:absolute; right: 10px; width: 20px; top: 13px;" src="close.png"></img></div>
         <%}%>
 	</div>
 
