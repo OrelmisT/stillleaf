@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 const env = process.env
+console.log(`DB URI: ${process.env.DB_URI}`)
 const db = new Client({connectionString:process.env.DB_URI})
 db.connect()
 
@@ -49,12 +50,12 @@ app.post('/signup', async (req, res) =>{
 
     const emailtMatchCount = (await db.query('select count(*) from accounts where accounts.email=$1', [email])).rows[0].count
     if(emailtMatchCount > 0){
-        res.render('signup.ejs', {errorMessage:'An account using this email already exists'})
+        res.render('signup.ejs', {errorMessage:'An account using this email already exists', username, email, password})
         return
     }
     const usernameMatchCount = (await db.query('select count(*) from accounts where accounts.username=$1', [username])).rows[0].count
     if(usernameMatchCount > 0){
-        res.render('signup.ejs', {errorMessage:"This username is taken"})
+        res.render('signup.ejs', {errorMessage:"This username is taken", username, email, password})
         return
     }
 
