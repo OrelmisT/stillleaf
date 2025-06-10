@@ -33,7 +33,7 @@ const verifyAccessToken = (req, res, next) => {
     }
     jwt.verify(accessToken, process.env.ACCESS_SECRET, (err, data) =>{
         if(err){
-            res.redirect('/login')
+            res.cookie('access_jwt', undefined, {httpOnly:true, maxAge:0}).cookie('refresh_jwt', undefined, {httpOnly:true, maxAge:0}).redirect('/login')
         }else{
             req.email = data.email
             next()
@@ -48,6 +48,12 @@ app.get('/', (req, res) =>{
 })
 
 app.get('/login', (req, res)=> {
+    const cookies = req.cookies
+    const token = cookies?.access_jwt
+    if(token){
+        res.redirect('/leaves')
+        return
+    }
     res.render('login.ejs')
 })
 
@@ -85,6 +91,12 @@ app.get('/leaves', verifyAccessToken,  (req, res) =>{
 })
 
 app.get('/signup', (req, res) => {
+    const cookies = req.cookies
+    const token = cookies?.access_jwt
+    if(token){
+        res.redirect('/leaves')
+        return
+    }
     res.render('signup.ejs')
 })
 
@@ -112,12 +124,18 @@ app.post('/signup', async (req, res) =>{
         password_hash = await bcrypt.hash(password, salt_rounds)
     }catch(e){
         res.render('signup.ejs', {errorMessage:'Something went wrong. Try again later'})
+        return
     }
     const result = await db.query('insert into accounts values($1, $2, $3)', [username, email, password_hash])
 
     const accessToken =  jwt.sign({email}, process.env.ACCESS_SECRET) 
     const refreshToken = jwt.sign({email}, process.env.REFRESH_SECRET)
     res.cookie('access_jwt', accessToken, {httpOnly:true}).cookie('refresh_jwt', refreshToken, {httpOnly:true}).redirect('/leaves')
+})
+
+app.get('/logout', (req, res) => {
+    res.cookie('access_jwt', undefined, {httpOnly:true, maxAge:0}).cookie('refresh_jwt', undefined, {httpOnly:true, maxAge:0})
+    .redirect('/login')
 })
 
 app.listen(port, ()=>{
