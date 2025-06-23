@@ -1,9 +1,3 @@
-new_leaf_btn = document.querySelector('#new-leaf-btn')
-new_leaf_btn.addEventListener("click", (e) => {
-    console.log(window.location.href)
-    window.location.href = "/login"
-})
-
 logout_btn = document.querySelector('#logout')
 logout_btn.addEventListener("click", (e) => {
     window.location.href = '/logout'
@@ -28,8 +22,8 @@ const getSQLTimestamp = () => {
 
 
 // create a new note
-const sidebar_new_reflection_btn = document.querySelector('#new-note-sidebar-button')
-sidebar_new_reflection_btn.addEventListener('click', async ()=>{
+
+const createPost = async ()=>{
     // document.querySelector('#blank-note-content').style.display = 'none'
     // document.querySelector('#instantiated-note-content').style.display = 'block'
     const ts = getSQLTimestamp()
@@ -56,10 +50,9 @@ sidebar_new_reflection_btn.addEventListener('click', async ()=>{
         initializeReflection(new_reflection)
         new_reflection.click()
     }
-
-
-
-})
+}
+const sidebar_new_reflection_btn = document.querySelector('#new-note-sidebar-button').addEventListener('click', createPost)
+const big_new_reflection_btn = document.querySelector('#new-leaf-btn').addEventListener('click', createPost)
 
 // Switch focus to reflection body input when clicking enter on title
 const body_input = document.querySelector('#body-input')
