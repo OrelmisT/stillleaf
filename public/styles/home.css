@@ -4,12 +4,7 @@
     box-sizing: border-box;
 }
 
-#container1{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-}
+
 
 #container1 h2{
     font-family: "Alatsi", sans-serif;
@@ -33,7 +28,10 @@ nav{
     justify-content: space-between;
     padding-left: 20px;
     padding-right: 20px;   
+    position: sticky;
+    top: 0;
 }
+
 
 nav h1{
     font-size: 2.5rem;
@@ -84,4 +82,210 @@ nav h1:hover{
     width: 32px;
     right: 10px;
     top:17px;
+}
+
+#page-content{
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+}
+
+#side-bar{
+    width: 250px;
+    min-width: 250px;
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+ 
+}
+
+#notes-list{
+    flex-grow: 100;
+    /* flex-shrink: 2; */
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: auto;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  
+}
+
+#notes-list::-webkit-scrollbar {
+    display: none;
+}
+
+#note-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 2;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+#search-bar-div{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+#search-bar{
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid black;
+    width: 180px;
+}
+
+#new-note-sidebar-button{
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none;
+    color: white;
+    background-color: #4A513F;
+    font-size: 1.3rem;
+}
+
+
+#logout-lock-options{
+    display: flex; flex-direction: row;
+    align-items: center;
+    height: fit-content;
+    justify-content: center;
+    /* padding-top: 18px; */
+    font-size: 1.3rem;
+    border-top: 5px solid #4A513F;
+    padding-top: 5px;
+    height: fit-content;
+    padding-bottom: 0;
+}
+
+#logout-lock-options p{
+    margin-bottom: 10px;
+}
+
+#logout-lock-options{
+    /* transform: translateY(10px); */
+}
+   
+
+/* #logout-lock-options p{
+    display: block;
+} */
+
+#logout:hover, #lock:hover{
+    cursor: pointer;
+    text-decoration: underline;
+} 
+
+.reflection-li{
+    padding: 5px;
+}
+
+.reflection-li{
+
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid black;
+}
+
+.reflection-li-content{
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap:0;
+    padding-left:2px;
+    padding-bottom: 4px;
+
+   
+}
+
+.reflection-li-content p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    margin: 0;
+   
+
+}
+
+.reflection-li[data-selected='false']{
+    background-color: #D9D9D9;
+}
+
+.reflection-li[data-selected='true']{
+    background-color: #BBC2AF;
+}
+
+.reflection-li:hover{
+    cursor: pointer;
+}
+
+.reflection-li-creation-ts{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+.reflection-li-creation-ts p{
+    padding: 0;
+    margin: 0;
+
+}
+
+#title-input{
+    display: block;
+    padding: 10px;
+    font-size: 2rem;
+    width: 100%;
+    font-weight: bold;
+    outline: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+}
+
+#body-input{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    white-space: pre-line;
+    outline: none;
+    resize: none;
+    /* height: auto; */
+    min-height: 500px;
+    field-sizing: content;
+    padding-bottom: 20px;
+}
+
+#blank-note-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 2;
+
+    
+}
+
+#delete{
+    align-self: center;
+    position: relative;
+    top:5px;
+}
+
+#delete:hover{
+    cursor: pointer;
 }

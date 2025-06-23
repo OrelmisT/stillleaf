@@ -1,58 +1,62 @@
 import express from 'express'
 import cors from 'cors'
 import {dirname, join} from 'path'
-import { fileURLToPath, URLSearchParams } from 'node:url';
+import { fileURLToPath} from 'node:url';
 import {Client} from 'pg'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
-import { NONAME } from 'node:dns';
+import session from 'express-session';
+
 
 dotenv.config()
-const env = process.env
 const db = new Client({connectionString:process.env.DB_URI})
 db.connect()
 
 const app = express()
 app.use(cors())
-app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 const port=8500
 const __dirname = dirname(fileURLToPath(import.meta.url))
 app.use(express.static(join(__dirname, 'public')))
-// console.log(__dirname)
 app.use(cookieParser())
+app.use(session(
+    {
+        secret:process.env.SESSION_SECRET,
+        rolling: true,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {httpOnly: true, maxAge: 1000 * 60 * 30, name:'user_session' }
+    }
+))
 
-const verifyAccessToken = (req, res, next) => {
-    
-    const cookies = req.cookies
-    const accessToken = cookies?.access_jwt
-    if(!accessToken){
+
+const verifySession = (req, res, next) => {
+    if(req.session.user){
+        next()
+    }
+    else{
         res.redirect('/login')
     }
-    jwt.verify(accessToken, process.env.ACCESS_SECRET, (err, data) =>{
-        if(err){
-            res.cookie('access_jwt', undefined, {httpOnly:true, maxAge:0}).cookie('refresh_jwt', undefined, {httpOnly:true, maxAge:0}).redirect('/login')
-        }else{
-            req.email = data.email
-            next()
-        }
-    })
-
 }
 
 
-app.get('/', (req, res) =>{
-    res.redirect('/login')
-})
 
-app.get('/login', (req, res)=> {
-    const cookies = req.cookies
-    const token = cookies?.access_jwt
-    if(token){
+app.get('/', (req, res) =>{
+    if (req.session.user){
         res.redirect('/leaves')
         return
+    }
+    res.render('landing_page.ejs')
+})
+
+
+
+app.get('/login', (req, res)=> {
+    if (req.session.user){
+        res.redirect('/leaves')
+        return  
     }
     res.render('login.ejs')
 })
@@ -80,20 +84,21 @@ app.post('/login', async (req, res)=>{
         return
     }
 
-    const accessToken =  jwt.sign({email}, process.env.ACCESS_SECRET) 
-    const refreshToken = jwt.sign({email}, process.env.REFRESH_SECRET)
-    res.cookie('access_jwt', accessToken, {httpOnly:true}).cookie('refresh_jwt', refreshToken, {httpOnly:true}).redirect('/leaves')
+    req.session.user = {email, username:response.rows[0].username}
+    res.redirect('/leaves')
 })
 
-app.get('/leaves', verifyAccessToken,  (req, res) =>{
-    res.render('home.ejs')
+app.get('/leaves', verifySession,  async (req, res) =>{
+    const email = req.session.user.email
+    const response = await db.query('select * from reflections where user_email = $1 order by last_modified_time_stamp desc',[email])
+    const reflections = response.rows
+    console.log(reflections)
+    res.render('home.ejs', {reflections})
 
 })
 
 app.get('/signup', (req, res) => {
-    const cookies = req.cookies
-    const token = cookies?.access_jwt
-    if(token){
+    if(req.session.user){
         res.redirect('/leaves')
         return
     }
@@ -126,16 +131,69 @@ app.post('/signup', async (req, res) =>{
         res.render('signup.ejs', {errorMessage:'Something went wrong. Try again later'})
         return
     }
-    const result = await db.query('insert into accounts values($1, $2, $3)', [username, email, password_hash])
+    const result = await db.query('insert into accounts values($1, $2, $3)', [email, username , password_hash])
 
-    const accessToken =  jwt.sign({email}, process.env.ACCESS_SECRET) 
-    const refreshToken = jwt.sign({email}, process.env.REFRESH_SECRET)
-    res.cookie('access_jwt', accessToken, {httpOnly:true}).cookie('refresh_jwt', refreshToken, {httpOnly:true}).redirect('/leaves')
+    req.session.user = {username, email}
+    res.redirect('/leaves')
 })
 
 app.get('/logout', (req, res) => {
-    res.cookie('access_jwt', undefined, {httpOnly:true, maxAge:0}).cookie('refresh_jwt', undefined, {httpOnly:true, maxAge:0})
-    .redirect('/login')
+    req.session.destroy((err) => {
+        res.clearCookie('user_session')
+        res.redirect('/login')
+    })
+   
+})
+
+
+app.put('/reflections/:id', verifySession , async (req, res)=>{
+    console.log('update')
+    console.log(req.body)
+    console.log(req.params.id)
+
+    const {email, username} = req.session.user
+    const response = await db.query('select * from reflections where id = $1', [req.params.id])
+    if (response.rowCount === 0){
+        res.status(404).json({'error':'No reflection with this id exists'})
+        return
+    }
+    if(email !== response.rows[0].user_email){
+        res.status(401).json({'error':'Unauthorized'})
+        return
+    }
+
+    const updateResponse = await db.query('update reflections set title = $1, content = $2, last_modified_time_stamp = $3 where id = $4', [req.body.title, req.body.content, req.body.last_modified_time_stamp, req.params.id])
+
+    res.status(200).json({"message":"reflection successfully updated"})
+
+
+})
+
+app.post('/reflections', verifySession, async (req, res) => {
+    // console.log(req.body)
+    const {title, content, timestamp} = req.body
+    const user_email = req.session.user.email
+    const insertResponse = await db.query('insert into reflections (user_email, content, title, creation_time_stamp, last_modified_time_stamp) values ($1, $2, $3, $4, $5) returning *', [user_email, content, title, timestamp, timestamp])
+
+    res.status(201).json({'message':'reflection successfully created', 'reflection': insertResponse.rows[0]})
+
+
+})
+
+app.delete('/reflections/:id', verifySession, async(req, res) =>{
+    const response = await db.query('select * from reflections where id = $1', [req.params.id])
+    if(response.rowCount === 0){
+        res.status(404).json({'error': 'No reflection with this id exists'})
+        return
+    }
+    if(req.session.user.email !== response.rows[0].user_email){
+        res.status(401).json({"error": "Unauthorized"})
+        return
+    }
+
+    const delete_response = await db.query('delete from reflections where id = $1', [req.params.id])
+    res.status(200).json({'message':'reflection was successfully deleted'})
+
 })
 
 app.listen(port, ()=>{

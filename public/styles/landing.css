@@ -1,0 +1,82 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Alatsi", sans-serif;
+}
+
+nav{
+    background-color: #4A513F;
+    padding: 10px;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    gap:15px;
+    height: fit-content;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;   
+    position: sticky;
+}
+
+nav h1{
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+nav h1:hover{
+    cursor: pointer;
+}
+
+#tree{
+    display: inline;
+    height:60px;
+    transform: translateY(-5px);
+  
+}
+
+#hero{
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 80px) ;
+}
+
+#hero h1{
+    font-size: 5rem;
+}
+
+#hero p{
+    font-size: 2rem;
+    color: #4A513F;
+}
+
+.hero-btn{
+    font-size: 3rem;
+    padding: 10px;
+    border-radius: 15px;
+    width: 200px;
+    margin-top: 20px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+#signup{
+    color: white;
+    background-color: #4A513F;
+    border: none;
+}
+
+#login{
+    color: #4A513F;
+    background-color: white;
+    border: 2px solid #4A513F;
+}
+
+#hero img{
+    width: 500px;
+}
