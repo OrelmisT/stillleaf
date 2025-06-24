@@ -13,8 +13,7 @@ services:
       context: .
     environment:
       DB_URI: ${DB_URI}
-      ACCESS_SECRET: ${ACCESS_SECRET}
-      REFRESH_SECRET: ${REFRESH_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
       NODE_ENV: production
     ports:
       - 8500:8500

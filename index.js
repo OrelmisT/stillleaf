@@ -32,12 +32,51 @@ app.use(session(
 ))
 
 
-const verifySession = (req, res, next) => {
+
+function formatDateStringToEST(input) {
+        const date = new Date(input);
+
+        const options = {
+            timeZone: 'America/New_York',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+            timeZoneName: 'short',
+        };
+
+        const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date);
+        
+        const month = parts.find(p => p.type === 'month').value;
+        const day = parts.find(p => p.type === 'day').value;
+        const hour = parts.find(p => p.type === 'hour').value;
+        const minute = parts.find(p => p.type === 'minute').value;
+        const dayPeriod = parts.find(p => p.type === 'dayPeriod').value;
+        const zone = parts.find(p => p.type === 'timeZoneName').value;
+
+        return `${month} ${day}, ${hour}:${minute}${dayPeriod} ${zone}`;
+}
+
+
+
+// redirect to login if session not verified (form submission)
+const verifySession_redirect = (req, res, next) => {
     if(req.session.user){
         next()
     }
     else{
         res.redirect('/login')
+    }
+}
+
+// send error response to redirect on the client (json request)
+const verifySession_error_msg = (req, res, next) => {
+    if(req.session.user){
+        next()
+    }
+    else{
+        res.status(401).json({'error':'session expired'})
     }
 }
 
@@ -88,12 +127,11 @@ app.post('/login', async (req, res)=>{
     res.redirect('/leaves')
 })
 
-app.get('/leaves', verifySession,  async (req, res) =>{
+app.get('/leaves', verifySession_redirect,  async (req, res) =>{
     const email = req.session.user.email
     const response = await db.query('select * from reflections where user_email = $1 order by last_modified_time_stamp desc',[email])
     const reflections = response.rows
-    console.log(reflections)
-    res.render('home.ejs', {reflections})
+    res.render('home.ejs', {reflections, 'formatDateStringToEST': formatDateStringToEST})
 
 })
 
@@ -146,10 +184,8 @@ app.get('/logout', (req, res) => {
 })
 
 
-app.put('/reflections/:id', verifySession , async (req, res)=>{
-    console.log('update')
-    console.log(req.body)
-    console.log(req.params.id)
+app.put('/reflections/:id', verifySession_error_msg , async (req, res)=>{
+    
 
     const {email, username} = req.session.user
     const response = await db.query('select * from reflections where id = $1', [req.params.id])
@@ -162,6 +198,12 @@ app.put('/reflections/:id', verifySession , async (req, res)=>{
         return
     }
 
+    // Do not update timestamp if neither the title nor the content have changed
+    if(response.rows[0].content === req.body.content && response.rows[1].title === req.body.title){
+        res.status(200).json({"message": "no change"})
+        return
+    }
+
     const updateResponse = await db.query('update reflections set title = $1, content = $2, last_modified_time_stamp = $3 where id = $4', [req.body.title, req.body.content, req.body.last_modified_time_stamp, req.params.id])
 
     res.status(200).json({"message":"reflection successfully updated"})
@@ -169,8 +211,7 @@ app.put('/reflections/:id', verifySession , async (req, res)=>{
 
 })
 
-app.post('/reflections', verifySession, async (req, res) => {
-    // console.log(req.body)
+app.post('/reflections', verifySession_error_msg, async (req, res) => {
     const {title, content, timestamp} = req.body
     const user_email = req.session.user.email
     const insertResponse = await db.query('insert into reflections (user_email, content, title, creation_time_stamp, last_modified_time_stamp) values ($1, $2, $3, $4, $5) returning *', [user_email, content, title, timestamp, timestamp])
@@ -180,7 +221,7 @@ app.post('/reflections', verifySession, async (req, res) => {
 
 })
 
-app.delete('/reflections/:id', verifySession, async(req, res) =>{
+app.delete('/reflections/:id', verifySession_error_msg, async(req, res) =>{
     const response = await db.query('select * from reflections where id = $1', [req.params.id])
     if(response.rowCount === 0){
         res.status(404).json({'error': 'No reflection with this id exists'})

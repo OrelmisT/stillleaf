@@ -21,12 +21,31 @@ const getSQLTimestamp = () => {
 }
 
 
+function formatToEST(timestamp) {
+  const date = new Date(timestamp);
+
+  const options = {
+    timeZone: 'America/New_York',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  };
+
+  const readable_ts = date.toLocaleString('en-US', options)
+
+  return readable_ts.slice(0, 12) + readable_ts.slice(13)
+}
+
 // create a new note
 
 const createPost = async ()=>{
     // document.querySelector('#blank-note-content').style.display = 'none'
     // document.querySelector('#instantiated-note-content').style.display = 'block'
     const ts = getSQLTimestamp()
+    const readable_ts = formatToEST(ts)
     const response = await fetch('/reflections', {method:'POST', headers:{"Content-Type": 'application/json'}, body: JSON.stringify({title:'', content:'',timestamp:ts})})
     if (response.status === 201){
 
@@ -40,15 +59,17 @@ const createPost = async ()=>{
             <div class='reflection-li-content'>
                 <p  class="reflection-li-title" style="font-weight: bold; font-size: 1.2rem;">${data.reflection.title || 'Untitled'}</p>
                 <p class="reflection-li-body" style="font-size: 0.8rem;"> ${data.reflection.content}</p>
-                <p style="font-size: 0.6rem;" > Last modified ${data.reflection.last_modified_time_stamp}</p>
+                <p class="reflection-li-last-modified_ts" style="font-size: 0.6rem;" > Last modified ${readable_ts}</p>
             </div>
             <div class="reflection-li-creation-ts">
-                            <p>JAN <br> 24</p>
+                            <p>${readable_ts.slice(0, 3)} <br> ${readable_ts.slice(4, 6)}</p>
             </div>
         `
         document.querySelector('#notes-list').prepend(new_reflection)
         initializeReflection(new_reflection)
         new_reflection.click()
+    } else if (response.status === 401){
+        window.location.href = '/login'
     }
 }
 const sidebar_new_reflection_btn = document.querySelector('#new-note-sidebar-button').addEventListener('click', createPost)
@@ -124,7 +145,20 @@ const initializeReflection = (reflection) =>{
             editPost = async (e) =>{
                 const title = reflection.dataset.reflection_title
                 const content = reflection.querySelector('.reflection-li-body').textContent
-                const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:"PUT", headers:{"Content-Type": 'application/json'},body:JSON.stringify({title:title, content:content,last_modified_time_stamp:getSQLTimestamp()})})
+                const ts = getSQLTimestamp()
+                const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:"PUT", headers:{"Content-Type": 'application/json'},body:JSON.stringify({title:title, content:content,last_modified_time_stamp:ts})})
+                if(response.status === 401){
+                    window.location.href = "/login"
+                }
+                if(response.status === 200 ){
+                    const response_body = await response.json()
+                    if(response_body.message === 'reflection successfully updated'){
+                        // update last_modified_ts on side panel
+                        reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
+
+                    }
+
+                }
             }
             document.querySelector('#title-input').addEventListener('blur', editPost)
             document.querySelector('#body-input').addEventListener('blur', editPost)
@@ -139,6 +173,8 @@ const initializeReflection = (reflection) =>{
                     document.querySelector('#blank-note-content').style.display = 'flex'
                     document.querySelector('#instantiated-note-content').style.display = 'none'
                     reflection.remove()
+                } else if(response.status === 401){
+                    window.location.href = "/login"
                 }
 
             }
