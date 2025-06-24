@@ -1,7 +1,19 @@
 logout_btn = document.querySelector('#logout')
 logout_btn.addEventListener("click", (e) => {
+    localStorage.clear()
     window.location.href = '/logout'
 })
+
+const lock_btn = document.querySelector("#lock")
+lock_btn.addEventListener("click", (e) => {
+    //don't clear local storage
+    window.location.href = '/logout'
+})
+
+const username = document.querySelector('#username').textContent
+const email = document.querySelector('#email').textContent
+localStorage.setItem('username', username)
+localStorage.setItem('email', email)
 
 
 

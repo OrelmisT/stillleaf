@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
 
+
+
 dotenv.config()
 const db = new Client({connectionString:process.env.DB_URI})
 db.connect()
@@ -80,7 +82,42 @@ const verifySession_error_msg = (req, res, next) => {
     }
 }
 
+app.get('/unlock', (req, res) => {
+    if(req.session.user){
+        res.redirect('/leaves')
+        return
+    }
+    res.render('unlock.ejs')
+})
 
+app.post('/unlock', async (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+
+    const response = await db.query('select * from accounts where accounts.email=$1', [email])
+    if(response.rowCount === 0){
+        res.render('login.ejs', {errorMessage:'No account with this email exists', email, password})
+        return
+    }
+    const hashedPassword = response.rows[0].password
+    let passwordIsCorrect = undefined
+    try{
+         passwordIsCorrect = await bcrypt.compare(password, hashedPassword)
+    }catch(e){
+        res.render('unlock.ejs', {errorMessage:'Something went wrong. Try again later', password})
+        return
+    }
+
+    if(!passwordIsCorrect){
+        res.render('unlock.ejs', {errorMessage:'Incorrect password.', password})
+        return
+    }
+
+    req.session.user = {email, username:response.rows[0].username}
+    res.redirect('/leaves')
+    
+
+})
 
 app.get('/', (req, res) =>{
     if (req.session.user){
@@ -131,7 +168,7 @@ app.get('/leaves', verifySession_redirect,  async (req, res) =>{
     const email = req.session.user.email
     const response = await db.query('select * from reflections where user_email = $1 order by last_modified_time_stamp desc',[email])
     const reflections = response.rows
-    res.render('home.ejs', {reflections, 'formatDateStringToEST': formatDateStringToEST})
+    res.render('home.ejs', {reflections, 'formatDateStringToEST': formatDateStringToEST, 'user': req.session.user})
 
 })
 

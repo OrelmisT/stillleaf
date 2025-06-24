@@ -1,0 +1,110 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Alatsi", sans-serif;
+}
+
+
+nav{
+    background-color: #4A513F;
+    padding: 10px;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    gap:15px;
+    height: fit-content;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;   
+}
+
+nav h1{
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+nav h1:hover{
+    cursor: pointer;
+}
+
+#tree{
+    display: inline;
+    height:60px;
+    transform: translateY(-5px);
+  
+}
+
+h2{
+    text-align: center;
+    margin-top:20px;
+    color:#4A513F;
+    font-size: 3rem;
+}
+
+#leaf{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    height: auto;
+}
+
+button{
+    font-size: 2rem;
+    width: 150px;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+#unlock{
+    background-color: #4A513F;
+
+}
+
+#logout{
+    background-color: #B84C4C;
+}
+
+input{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+    color: #4A513F;
+}
+
+.error{
+    background-color: rgb(228, 126, 126);
+    padding: 10px;
+    padding-right: 40px;
+    color: white;
+    position: relative;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+
+#close:hover{
+    cursor: pointer;
+}

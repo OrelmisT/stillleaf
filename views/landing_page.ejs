@@ -7,6 +7,16 @@
     <title>StillLeaf</title>
 </head>
 <body>
+    <script>
+        const username = localStorage.getItem('username')
+        const email = localStorage.getItem('email')
+
+        if(username && email){
+            window.location.href = '/unlock'
+        }else{
+            localStorage.clear()
+        }
+    </script>
     <nav>
         <div style="display: flex; align-items: center; gap: 15px;">
             <img id='tree' src="tree.png">
