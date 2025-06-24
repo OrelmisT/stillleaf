@@ -7,8 +7,13 @@ import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import { RedisStore } from 'connect-redis';
+import { createClient } from 'redis';
 
 
+
+const redisClient = createClient({url:process.env.REDIS_URI})
+await redisClient.connect()
 
 
 dotenv.config()
@@ -25,6 +30,7 @@ app.use(express.static(join(__dirname, 'public')))
 app.use(cookieParser())
 app.use(session(
     {
+        store: new RedisStore({client:redisClient}),
         secret:process.env.SESSION_SECRET,
         rolling: true,
         resave: false,
