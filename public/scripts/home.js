@@ -47,8 +47,9 @@ function formatToEST(timestamp) {
   };
 
   const readable_ts = date.toLocaleString('en-US', options)
+  console.log(readable_ts)
 
-  return readable_ts.slice(0, 12) + readable_ts.slice(13)
+  return readable_ts
 }
 
 // create a new note

@@ -63,7 +63,7 @@ function formatDateStringToEST(input) {
         const dayPeriod = parts.find(p => p.type === 'dayPeriod').value;
         const zone = parts.find(p => p.type === 'timeZoneName').value;
 
-        return `${month} ${day}, ${hour}:${minute}${dayPeriod} ${zone}`;
+        return `${month} ${day}, ${hour}:${minute} ${dayPeriod} ${zone}`;
 }
 
 
