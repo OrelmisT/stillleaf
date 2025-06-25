@@ -157,6 +157,7 @@ const initializeReflection = (reflection) =>{
             document.querySelector('#body-input').removeEventListener('blur', editPost)
             editPost = async (e) =>{
                 const title = reflection.dataset.reflection_title
+                console.log(`relfection title: ${title}`)
                 const content = reflection.querySelector('.reflection-li-body').textContent
                 const ts = getSQLTimestamp()
                 const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:"PUT", headers:{"Content-Type": 'application/json'},body:JSON.stringify({title:title, content:content,last_modified_time_stamp:ts})})
@@ -168,13 +169,17 @@ const initializeReflection = (reflection) =>{
                     if(response_body.message === 'reflection successfully updated'){
                         // update last_modified_ts on side panel
                         reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
+                        const notes_list = document.querySelector('#notes-list')
+                        // Move to the top of the list
+                        reflection.remove()
+                        notes_list.prepend(reflection)
 
                     }
 
                 }
             }
-            document.querySelector('#title-input').addEventListener('blur', editPost)
             document.querySelector('#body-input').addEventListener('blur', editPost)
+            document.querySelector('#title-input').addEventListener('blur', editPost)
             
 
             // Setup delete reflection handler (persist)
@@ -206,3 +211,22 @@ const reflections = document.querySelectorAll('.reflection-li')
 for(const reflection of reflections){
     initializeReflection(reflection)
 }
+
+// traverse through the reflections using arrow keys
+document.addEventListener('keyup',  (e) => {
+    if(document.activeElement === document.querySelector('#title-input') || document.activeElement === document.querySelector("#body-input")){
+        return
+    }
+
+    if(!selectedReflection){
+        return
+    }
+
+    if ((e.key === 'ArrowUp' || e.key == 'ArrowLeft') && selectedReflection.previousElementSibling) {
+        selectedReflection.previousElementSibling.click()
+
+    } else if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && selectedReflection.nextElementSibling){
+        selectedReflection.nextElementSibling.click()
+    }
+        
+});

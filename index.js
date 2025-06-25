@@ -228,6 +228,8 @@ app.get('/logout', (req, res) => {
 
 
 app.put('/reflections/:id', verifySession_error_msg , async (req, res)=>{
+
+    console.log(req.body)
     
 
     const {email, username} = req.session.user
@@ -242,7 +244,7 @@ app.put('/reflections/:id', verifySession_error_msg , async (req, res)=>{
     }
 
     // Do not update timestamp if neither the title nor the content have changed
-    if(response.rows[0].content === req.body.content && response.rows[1].title === req.body.title){
+    if(response.rows[0].content === req.body.content && response.rows[0].title === req.body.title){
         res.status(200).json({"message": "no change"})
         return
     }
