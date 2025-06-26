@@ -4,29 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/landing.css">
-    <title>StillLeaf</title>
+    <title>Stilleaf</title>
+    <link rel="icon" href="./tree-green.png">
 </head>
 <body>
-    <script>
-        const username = localStorage.getItem('username')
-        const email = localStorage.getItem('email')
-
-        if(username && email){
-            window.location.href = '/unlock'
-        }else{
-            localStorage.clear()
-        }
-    </script>
     <nav>
         <div style="display: flex; align-items: center; gap: 15px;">
             <img id='tree' src="tree.png">
-            <h1 style="display: inline;">StillLeaf</h1>
+            <h1 style="display: inline;">Stilleaf</h1>
         </div>
     </nav>
     <section id="hero">
         <div style="display: flex; flex-direction: column; justify-content: center; padding-left: 100px; gap: 30px;">
             <h1>Reflect. Grow. <br> Propser.</h1>
-            <p>StillLeaf provides you with a space to gather your thoughts and prepare for what’s ahead through reflection and task planning </p>
+            <p>StillLeaf helps you become your best self through journaling, habit tracking, and daily routine adherence </p>
             <div style="display: flex; flex-direction: row; gap:40px">
                 <a href="/signup"><button class="hero-btn" id="signup">SignUp</button></a>
                 <a href="/login"><button class="hero-btn" id="login">Login</button></a>

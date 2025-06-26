@@ -9,6 +9,22 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { RedisStore } from 'connect-redis';
 import { createClient } from 'redis';
+import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
+
+dotenv.config()
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    from:'stilleaf',
+    auth:{
+        user:process.env.EMAIL_USER,
+        pass:process.env.EMAIL_PASSWORD
+    }
+})
+
 
 
 
@@ -16,7 +32,6 @@ const redisClient = createClient({url:process.env.REDIS_URI})
 await redisClient.connect()
 
 
-dotenv.config()
 const db = new Client({connectionString:process.env.DB_URI})
 db.connect()
 
@@ -88,42 +103,7 @@ const verifySession_error_msg = (req, res, next) => {
     }
 }
 
-app.get('/unlock', (req, res) => {
-    if(req.session.user){
-        res.redirect('/leaves')
-        return
-    }
-    res.render('unlock.ejs')
-})
 
-app.post('/unlock', async (req, res) => {
-    const email = req.body.email
-    const password = req.body.password
-
-    const response = await db.query('select * from accounts where accounts.email=$1', [email])
-    if(response.rowCount === 0){
-        res.render('login.ejs', {errorMessage:'No account with this email exists', email, password})
-        return
-    }
-    const hashedPassword = response.rows[0].password
-    let passwordIsCorrect = undefined
-    try{
-         passwordIsCorrect = await bcrypt.compare(password, hashedPassword)
-    }catch(e){
-        res.render('unlock.ejs', {errorMessage:'Something went wrong. Try again later', password})
-        return
-    }
-
-    if(!passwordIsCorrect){
-        res.render('unlock.ejs', {errorMessage:'Incorrect password.', password})
-        return
-    }
-
-    req.session.user = {email, username:response.rows[0].username}
-    res.redirect('/leaves')
-    
-
-})
 
 app.get('/', (req, res) =>{
     if (req.session.user){
@@ -281,6 +261,50 @@ app.delete('/reflections/:id', verifySession_error_msg, async(req, res) =>{
     res.status(200).json({'message':'reflection was successfully deleted'})
 
 })
+
+
+app.get('/request_password_reset', (req, res) =>{
+    if (req.session.user){
+        res.redirect('/leaves')
+        return
+    }
+
+    res.render('password_reset_request.ejs')
+
+})
+
+app.post('/request_password_reset', async (req, res) => {
+
+    console.log(process.env.EMAIL_USER)
+    console.log(process.env.EMAIL_PASSWORD)
+    console.log('route hit')
+    const email = req.body.email
+    const response = await db.query('select * from accounts where email = $1', [email])
+    if(response.rowCount === 0){
+        console.log("jeepers creepers")
+
+        res.render('password_reset_request.ejs', {"email":email, errorMessage:"No account with this email exists"})
+        return
+    }
+
+
+    const token = jwt.sign({email}, process.env.EMAIL_SECRET, {expiresIn:'15m'})
+
+    const info = await transporter.sendMail({
+        from:`"Stillleaf" <${process.env.EMAIL_USER}>`,
+        to:email,
+        subject:"Password Reset Link",
+        html:`<p>Your password reset link: ${process.env.APP_DOMAIN}/reset_passowrd?token=${token}</p>`
+    })
+
+    console.log(info)
+
+    res.render('password_reset_request.ejs', {email_sent: true})
+
+
+})
+
+
 
 app.listen(port, ()=>{
     console.log(`App running at http://localhost:${port}`)

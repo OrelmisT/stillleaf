@@ -97,10 +97,16 @@ form h1{
 
 }
 
+a{
+    all:unset;
+    text-decoration: none !important;
+}
+
 form p{
     font-size: 0.7rem;
     margin-top: 5px;
     color: #4A513F;
+    text-decoration: none;
 }
 form p:hover{
     text-decoration: underline;
