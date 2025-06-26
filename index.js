@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 })
 
 
-
+const salt_rounds = 10
 
 const redisClient = createClient({url:process.env.REDIS_URI})
 await redisClient.connect()
@@ -170,7 +170,7 @@ app.post('/signup', async (req, res) =>{
     const username = req.body.username
     const email = req.body.email
     const password = req.body.password
-    const salt_rounds = 10
+    
 
     const emailtMatchCount = (await db.query('select count(*) from accounts where accounts.email=$1', [email])).rows[0].count
     if(emailtMatchCount > 0){
@@ -294,7 +294,7 @@ app.post('/request_password_reset', async (req, res) => {
         from:`"Stillleaf" <${process.env.EMAIL_USER}>`,
         to:email,
         subject:"Password Reset Link",
-        html:`<p>Your password reset link: ${process.env.APP_DOMAIN}/reset_passowrd?token=${token}</p>`
+        html:`<p>Your password reset link: ${process.env.APP_DOMAIN}/password_reset?token=${token}</p>`
     })
 
     console.log(info)
@@ -304,6 +304,45 @@ app.post('/request_password_reset', async (req, res) => {
 
 })
 
+
+app.get('/password_reset', (req, res) =>{
+    const token = req.query.token
+    if(!token){
+        res.render('resetpassword.ejs', {errorMessage:'Invalid reset link'})
+        return
+    }
+
+    jwt.verify(token, process.env.EMAIL_SECRET, (err, data) =>{
+        if(err){
+            res.render('resetpassword.ejs', {errorMessage:"Invalid or expired reset link"})
+        }else{
+            res.render('resetpassword.ejs', {email:data.email})
+        }
+    })
+})
+
+app.post('/password_reset', async (req, res) => {
+    const token = req.query.token
+    if(!token){
+        res.render('resetpassword.ejs', {errorMessage:'Invalid reset link'})
+        return
+    }
+    let email = undefined
+    await jwt.verify(token, process.env.EMAIL_SECRET, (err, data) =>{
+        if(!err){
+            email = data.email
+        }else{
+            res.render('resetpassword.ejs', {errorMessage:"Invalid or expired reset link"})
+        }
+    })
+    const password = req.body.password
+    const passwordHash = await bcrypt.hash(password, salt_rounds)
+    const response = await db.query('update accounts  set password = $1 where email = $2 ', [passwordHash, email])
+    res.render('resetpassword.ejs', {success:true})
+
+
+
+})
 
 
 app.listen(port, ()=>{
