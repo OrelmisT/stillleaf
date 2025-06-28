@@ -65,7 +65,7 @@ const createPost = async ()=>{
         new_reflection.innerHTML = `
             <div class='reflection-li-content'>
                 <p  class="reflection-li-title" style="font-weight: bold; font-size: 1.2rem;">${data.reflection.title || 'Untitled'}</p>
-                <p class="reflection-li-body" style="font-size: 0.8rem;"> ${data.reflection.content}</p>
+                <p class="reflection-li-body" style="font-size: 0.8rem;">${data.reflection.content}</p>
                 <p class="reflection-li-last-modified_ts" style="font-size: 0.6rem;" > Last modified ${readable_ts}</p>
             </div>
             <div class="reflection-li-creation-ts">
@@ -88,7 +88,9 @@ const body_input = document.querySelector('#body-input')
 document.querySelector('#title-input').addEventListener('keyup', (e) =>{
     if(e.key === 'Enter'){
         e.preventDefault()
+        e.stopPropagation()
         body_input.focus()
+        document.querySelector('#body-input').trimStart()
     }
 })
 
