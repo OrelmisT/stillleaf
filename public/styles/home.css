@@ -131,16 +131,26 @@ nav h1:hover{
     padding-bottom: 10px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     align-items: center;
+    position: relative;
+}
+
+#mag-glass{
+    position:absolute;
+    right: 15px;
+    align-self: center;
+    width: 25px;
 }
 #search-bar{
     padding: 5px;
     padding-left: 10px;
     border-radius: 15px;
     border: 1px solid black;
-    width: 180px;
+    width: 99%;
+    position: relative;
+    padding-right: 33px;
 }
 
 #new-note-sidebar-button{

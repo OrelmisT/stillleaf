@@ -51,6 +51,11 @@ function formatToEST(timestamp) {
 const createPost = async ()=>{
     // document.querySelector('#blank-note-content').style.display = 'none'
     // document.querySelector('#instantiated-note-content').style.display = 'block'
+
+    // remove filtering on reflection list items
+    document.querySelector('#search-bar').value = ''
+    document.querySelectorAll('.reflection-li').forEach((reflectionli) => reflectionli.style.display='flex')
+
     const ts = getSQLTimestamp()
     const readable_ts = formatToEST(ts)
     const response = await fetch('/reflections', {method:'POST', headers:{"Content-Type": 'application/json'}, body: JSON.stringify({title:'', content:'',timestamp:ts})})
@@ -235,3 +240,19 @@ document.addEventListener('keyup',  (e) => {
     }
         
 });
+
+
+document.querySelector("#search-bar").addEventListener("input", (e) =>{
+    console.log(e.target.value)
+   const searchTerm = e.target.value.toLowerCase()
+   const relfectionLis = document.querySelectorAll(".reflection-li")
+   relfectionLis.forEach((reflectionLi) => {
+        const title = reflectionLi.querySelector('.reflection-li-title')
+        const body = reflectionLi.querySelector('.reflection-li-body')
+        if(title.textContent.toLowerCase().includes(searchTerm) ||body.textContent.toLowerCase().includes(searchTerm) ){
+            reflectionLi.style.display = 'flex'
+        }else{
+            reflectionLi.style.display = 'none'
+        }
+   })
+})
