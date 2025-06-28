@@ -223,7 +223,7 @@ for(const reflection of reflections){
 }
 
 // traverse through the reflections using arrow keys
-document.addEventListener('keyup',  (e) => {
+document.addEventListener('keyup', (e) => {
     if(document.activeElement === document.querySelector('#title-input') || document.activeElement === document.querySelector("#body-input")){
         return
     }
@@ -237,11 +237,16 @@ document.addEventListener('keyup',  (e) => {
 
     } else if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && selectedReflection.nextElementSibling){
         selectedReflection.nextElementSibling.click()
+    } else if (e.key === 'Backspace'){ 
+
+       document.querySelector('#delete').click()
     }
         
 });
 
 
+
+// Filter using search bar
 document.querySelector("#search-bar").addEventListener("input", (e) =>{
     console.log(e.target.value)
    const searchTerm = e.target.value.toLowerCase()

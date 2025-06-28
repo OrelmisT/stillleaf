@@ -50,7 +50,7 @@ app.use(session(
         rolling: true,
         resave: false,
         saveUninitialized: false,
-        cookie: {httpOnly: true, maxAge: 1000 * 60 * 30, name:'user_session' }
+        cookie: {httpOnly: true, maxAge: 1000 * 60 * 60 *2, name:'user_session' }
     }
 ))
 
