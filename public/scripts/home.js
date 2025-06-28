@@ -224,8 +224,17 @@ for(const reflection of reflections){
 
 // traverse through the reflections using arrow keys
 document.addEventListener('keyup', (e) => {
-    if(document.activeElement === document.querySelector('#title-input') || document.activeElement === document.querySelector("#body-input")){
-        return
+
+    if(document.activeElement === document.querySelector('#title-input')){
+       return
+    }
+
+    if(document.activeElement === document.querySelector("#body-input")){
+        if(e.ctrlKey && e.key === 'Enter'){
+            document.activeElement.blur()
+        }else{
+            return
+        }
     }
 
     if(!selectedReflection){
