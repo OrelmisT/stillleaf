@@ -183,8 +183,16 @@ const initializeReflection = (reflection) =>{
 
                 const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:'DELETE'})
                 if(response.status === 200){
-                    document.querySelector('#blank-note-content').style.display = 'flex'
-                    document.querySelector('#instantiated-note-content').style.display = 'none'
+                    const nextReflection = reflection.nextElementSibling
+                    const prevReflection = reflection.previousElementSibling
+                    if(nextReflection){
+                        nextReflection.click()
+                    }else if (prevReflection){
+                        prevReflection.click()
+                    }else{
+                        document.querySelector('#blank-note-content').style.display = 'flex'
+                        document.querySelector('#instantiated-note-content').style.display = 'none'
+                    }
                     reflection.remove()
                 } else if(response.status === 401){
                     window.location.href = "/login"
