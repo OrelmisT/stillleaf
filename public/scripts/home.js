@@ -75,6 +75,7 @@ const createPost = async ()=>{
         document.querySelector('#notes-list').prepend(new_reflection)
         initializeReflection(new_reflection)
         new_reflection.click()
+        document.querySelector('#title-input').focus()
     } else if (response.status === 401){
         window.location.href = '/login'
     }
