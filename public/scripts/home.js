@@ -46,6 +46,15 @@ function formatToEST(timestamp) {
   return readable_ts
 }
 
+
+const animateCreate = (e) =>{
+    initializeReflection(e.target)
+    e.target.click()
+    document.querySelector('#title-input').focus()
+
+}
+
+
 // create a new note
 
 const createPost = async ()=>{
@@ -78,9 +87,8 @@ const createPost = async ()=>{
             </div>
         `
         document.querySelector('#notes-list').prepend(new_reflection)
-        initializeReflection(new_reflection)
-        new_reflection.click()
-        document.querySelector('#title-input').focus()
+        new_reflection.classList.add('createdItem')
+        new_reflection.addEventListener('animationend', animateCreate)
     } else if (response.status === 401){
         window.location.href = '/login'
     }
@@ -116,6 +124,9 @@ const initializeReflection = (reflection) =>{
            selectedReflection = undefined
         }
         else{
+
+            reflection.classList.remove('createdItem')
+            reflection.removeEventListener('animationend', animateCreate)
 
             // select if it is not current reflection
 
@@ -190,17 +201,22 @@ const initializeReflection = (reflection) =>{
 
                 const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:'DELETE'})
                 if(response.status === 200){
-                    const nextReflection = reflection.nextElementSibling
-                    const prevReflection = reflection.previousElementSibling
-                    if(nextReflection){
-                        nextReflection.click()
-                    }else if (prevReflection){
-                        prevReflection.click()
-                    }else{
-                        document.querySelector('#blank-note-content').style.display = 'flex'
-                        document.querySelector('#instantiated-note-content').style.display = 'none'
-                    }
-                    reflection.remove()
+                    
+
+                    reflection.classList.add('deletedItem')
+                    reflection.addEventListener('animationend', ()=>{
+                        const nextReflection = reflection.nextElementSibling
+                        const prevReflection = reflection.previousElementSibling
+                        if(nextReflection){
+                            nextReflection.click()
+                        }else if (prevReflection){
+                            prevReflection.click()
+                        }else{
+                            document.querySelector('#blank-note-content').style.display = 'flex'
+                            document.querySelector('#instantiated-note-content').style.display = 'none'
+                        }
+                        reflection.remove()
+                    })
                 } else if(response.status === 401){
                     window.location.href = "/login"
                 }
@@ -222,8 +238,11 @@ for(const reflection of reflections){
     initializeReflection(reflection)
 }
 
+
 // traverse through the reflections using arrow keys
 document.addEventListener('keyup', (e) => {
+
+    e.preventDefault()
 
     if(document.activeElement === document.querySelector('#title-input')){
        return
@@ -246,7 +265,10 @@ document.addEventListener('keyup', (e) => {
 
     } else if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && selectedReflection.nextElementSibling){
         selectedReflection.nextElementSibling.click()
-    } else if (e.key === 'Backspace'){ 
+    } else if (e.key === 'Backspace'){
+         if(document.activeElement === document.querySelector('#search-bar')){
+            return 
+         } 
 
        document.querySelector('#delete').click()
     }
