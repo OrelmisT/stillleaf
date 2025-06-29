@@ -345,6 +345,24 @@ app.post('/password_reset', async (req, res) => {
 })
 
 
-app.listen(port, ()=>{
+// create tables if they do not already exist
+const initializeTables = async() =>{
+    
+    // accounts 
+    const accounts_response = await db.query("select exists(select 1 from information_schema.tables where table_name = 'accounts')")
+    console.log(`accounts response:${accounts_response.rows[0].exists}`)
+    if (!accounts_response.rows[0].exists){
+        await db.query("create table accounts (email text primary key, username text, password text)")
+    }
+    // reflections
+    const reflections_response = await db.query("select exists(select 1 from information_schema.tables where table_name = 'reflections')")
+    if (!reflections_response.rows[0].exists){
+        await db.query("create table reflections (id serial primary key, user_email text references accounts(email), content text, title text, creation_time_stamp timestamp, last_modified_time_stamp timestamp)")
+    }
+}
+
+
+app.listen(port, async ()=>{
+    await initializeTables()
     console.log(`App running at http://localhost:${port}`)
 })
