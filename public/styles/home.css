@@ -33,6 +33,41 @@ nav{
 }
 
 
+#hamburger{
+  display: flex;
+  width:32px;
+  height:25px;
+/*   background-color:black; */
+  flex-direction:column;
+  justify-content: space-between;
+  transform-origin: center center;
+  z-index: 5;
+  position: relative;
+  position: absolute;
+  top: 25px;
+  right: 20px;
+}
+
+#hamburger:hover{
+    cursor: pointer;
+}
+
+.bar{
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
+  height:3px;
+  min-height: 3px;
+  max-height: 3px;
+  background-color:white;
+  border-radius:5px;
+  z-index:5;
+  position: relative;
+}
+
+
+
+
 nav h1{
     font-size: 2.5rem;
     font-weight: bold;
@@ -345,4 +380,132 @@ nav h1:hover{
         padding-top: 5px;
         padding-bottom:5px;
     }
+}
+
+
+.rotateLeft{
+    animation-name: rotateLeft;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+
+.rotateRight{
+    animation-name: rotateRight;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes rotateLeft{
+    0%{
+        transform: rotate(0);
+    }
+
+    100%{
+        transform: rotate(-90deg);
+    }
+}
+
+@keyframes rotateRight{
+    0%{
+        transform:rotate(-90deg)
+    }
+
+    100%{
+        transform:rotate(0)
+    }
+}
+
+
+
+.darken{
+    animation-name: darken;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+   
+}
+
+.lighten{
+    animation-name: lighten;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+  
+}
+
+@keyframes darken{
+    0%{
+        background-color: white;
+        height: 3px;
+    }
+
+    100%{
+        background-color: black;
+        height: 3px;
+    }
+}
+
+@keyframes lighten{
+    0%{
+        background-color: black;
+        height: 3px;
+    }
+
+    100%{
+        background-color:white;
+        height: 3px;
+    }
+}
+
+
+.slideIn{
+    animation-name: slideIn;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+   
+}
+
+.slideOut{
+    animation-name: slideOut;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes slideIn {
+    0%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(0);
+    }
+    
+}
+
+@keyframes slideOut {
+    0%{
+        transform: translateX(0);
+    }
+    100%{
+        transform: translateX(100%);
+    }
+    
+}
+
+body{
+    overflow-x: hidden;
+}
+#navbar{
+    position: absolute;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    width: 300px;
+    background-color: #BBC2AF;
+    z-index: 1;
+    transform: translateX(100%);
 }
