@@ -76,6 +76,11 @@ const createPost = async ()=>{
         new_reflection.setAttribute('data-selected', 'false')
         new_reflection.setAttribute('data-post_id', data.reflection.id)
         new_reflection.setAttribute('data-reflection_title', data.reflection.title)
+        let numDay = readable_ts.slice(4,6)
+        numDay = numDay.split(',').join('')
+        if(numDay.length === 1){
+            numDay = '0' + numDay
+        }
         new_reflection.innerHTML = `
             <div class='reflection-li-content'>
                 <p  class="reflection-li-title" style="font-weight: bold; font-size: 1.2rem;">${data.reflection.title || 'Untitled'}</p>
@@ -83,7 +88,7 @@ const createPost = async ()=>{
                 <p class="reflection-li-last-modified_ts" style="font-size: 0.6rem;" > Last modified ${readable_ts}</p>
             </div>
             <div class="reflection-li-creation-ts">
-                            <p>${readable_ts.slice(0, 3)} <br> ${readable_ts.slice(4, 6)}</p>
+                            <p>${readable_ts.slice(0, 3)} <br> ${numDay}</p>
             </div>
         `
         document.querySelector('#notes-list').prepend(new_reflection)
