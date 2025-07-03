@@ -345,6 +345,21 @@ app.post('/password_reset', async (req, res) => {
 })
 
 
+app.get('/routines', verifySession_redirect,(req, res) => {
+
+    res.render('routines.ejs')
+} )
+
+
+app.get('/habits', verifySession_redirect, (req, res) => {
+    res.render('habits.ejs')
+})
+
+
+app.get('/account', verifySession_redirect, (req, res) =>{
+    res.render('account.ejs')
+})
+
 // create tables if they do not already exist
 const initializeTables = async() =>{
     
