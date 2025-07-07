@@ -364,20 +364,32 @@ app.get('/account', verifySession_redirect, (req, res) =>{
 const initializeTables = async() =>{
     
     // accounts 
-    const accounts_response = await db.query("select exists(select 1 from information_schema.tables where table_name = 'accounts')")
-    console.log(`accounts response:${accounts_response.rows[0].exists}`)
-    if (!accounts_response.rows[0].exists){
+    const accounts_response = await db.query("SELECT to_regclass('public.accounts')")
+    // console.log(`accounts response:${accounts_response.rows[0].exists}`)
+    if (!accounts_response.rows[0].to_regclass){
         await db.query("create table accounts (email text primary key, username text, password text)")
     }
     // reflections
-    const reflections_response = await db.query("select exists(select 1 from information_schema.tables where table_name = 'reflections')")
-    if (!reflections_response.rows[0].exists){
+    const reflections_response = await db.query("SELECT to_regclass('public.reflections')")
+    if (!reflections_response.rows[0].to_regclass){
         await db.query("create table reflections (id serial primary key, user_email text references accounts(email), content text, title text, creation_time_stamp timestamp, last_modified_time_stamp timestamp)")
     }
+
+   // routines
+   const routines_response = await db.query("SELECT to_regclass('public.routines')")
+   if(!routines_response.rows[0].to_regclass){
+        await db.query("create table routines (id serial primary key, user_email text references accounts(email), title text)")
+   }
+   // tasks
+   const tasks_response = await db.query("SELECT to_regclass('public.tasks')")
+   if(!tasks_response.rows[0].to_regclass){
+        await db.query("create table tasks (id serial primary key, routine_id int references routines(id), content text, completed boolean)")
+   }
 }
 
 
 app.listen(port, async ()=>{
     await initializeTables()
+    // console.log(await db.query('select * from tasks'))
     console.log(`App running at http://localhost:${port}`)
 })
