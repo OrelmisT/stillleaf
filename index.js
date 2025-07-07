@@ -350,6 +350,76 @@ app.get('/routines', verifySession_redirect,(req, res) => {
     res.render('routines.ejs')
 } )
 
+app.post('/routines', verifySession_error_msg, async (req, res) => {
+    const user_email = req.session.user.email
+    const {title} = req.body
+    const exists_response = await db.query("select exists(select * from routines where user_email = $1 and title = $2)", [user_email, title])
+    if(exists_response.rows[0].exists){
+        res.status(409).json({'errorMsg':'A routine with this title already exists'})
+        return
+    }else{
+        const response = await db.query("insert into routines(user_email, title) values ($1, $2) returning *", [user_email, title])
+        res.status(200).json({'message':'routine successfully created', "routine": response.rows[0]})
+        return
+    }
+
+})
+
+
+app.put('/routines/:id', verifySession_error_msg, async(req, res) => {
+    const routine_id = req.params.id
+    const {title} = req.body
+    const routine_response = await db.query('select * from routines where id = $1', [routine_id])
+    if(routine_response.rowCount === 0){
+        res.status(404).json({'errorMsg':'routine does not exist'})
+        return
+    }
+    if(req.session.user.email !== routine_response.rows[0].user_email){
+        res.status(401).json({'errorMsg':'unauthorized'})
+        return
+    }
+    await db.query('update routines set title = $1 where id = $2', [title, routine_id])
+    res.status(200).json({'message': 'routine successfully updated'})
+})
+
+
+app.post('/routines/:routine_id/tasks', verifySession_error_msg, async(req, res) => {
+    const routined_id = req.params.routine_id
+    const {content} = req.body.content
+    const routine_response = await db.query('select * from routines where id = $1', [routined_id])
+    if(routine_response.rowCount === 0){
+        res.status(404).json({"errorMsg":'routine does not exsit'})
+        return
+    }
+    if(req.session.user.email !== routine_response.rows[0].user_email){
+        res.status(401).json({'errorMsg':'unauthorized'})
+        return
+    }
+    const response = await db.query('insert into tasks (routine_id, content, completed) values ($1, $2, $3) returning *', [routined_id, content, false])
+    res.status(200).json({'message': 'task successfully created', "task":response.rows[0]})
+    return 
+})
+
+app.put('/tasks/:id', verifySession_error_msg, async(req, res) =>{
+    const task_id = req.params.id
+    const {content, completed} = req.body
+    const response = await db.query('select * from tasks join routines on tasks.routine_id = routines.idselect routines.id as routine_id, tasks.id as task_id, tasks.content as task_content, tasks.completed, routines.user_email  from tasks join routines on tasks.routine_id = routines.id where tasks.id = $1', [task_id])
+    if(response.rowCount === 0){
+        res.status(404).json({'errorMsg': "Either the routine or task does not exist"})
+        return
+    }
+    if(response.rows[0].user_email !== req.session.user.email){
+        res.status(401).json({'errorMsg':'unauthorized'})
+        return
+    }
+
+    await db.query('update tasks set content = $1, completed = $2', [content, completed])
+    res.status(200).json({"message":"task successfully updated"})
+    return
+
+})
+
+
 
 app.get('/habits', verifySession_redirect, (req, res) => {
     res.render('habits.ejs')
