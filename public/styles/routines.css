@@ -358,7 +358,7 @@ button:hover{
     font-style: normal;
     height: fit-content;
     font-size: 1.5rem;
-    padding: 15px;
+    padding: 18px;
     padding-right: 50px;
     border-radius: 15px;
     margin-top: 25px;
@@ -372,7 +372,7 @@ button:hover{
     position: absolute;
     width: 32px;
     right: 10px;
-    top:17px;
+    top:15px;
 }
 
 
