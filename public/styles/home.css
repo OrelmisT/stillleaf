@@ -511,6 +511,7 @@ body{
 }
 #navbar{
     position: absolute;
+    font-family: "Alatsi", sans-serif;
     height: 100vh;
     right: 0;
     top: 0;
