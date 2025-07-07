@@ -227,3 +227,159 @@ body{
     padding-top: 77px;
     gap: 32px;
 }
+
+#page-content{
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+}
+
+#side-bar{
+    width: 250px;
+    min-width: 250px;
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+ 
+}
+
+#routines-list{
+    flex-grow: 100;
+    /* flex-shrink: 2; */
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: auto;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  
+}
+
+#routines-list::-webkit-scrollbar {
+    display: none;
+}
+
+#search-bar-div{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+#mag-glass{
+    position:absolute;
+    right: 15px;
+    align-self: center;
+    width: 25px;
+}
+#search-bar{
+    padding: 7.8px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid black;
+    width: 99%;
+    position: relative;
+    padding-right: 33px;
+    font-size: 1rem;
+    
+}
+
+
+#new-routine-sidebar-button{
+    width: 100%;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    border: none;
+    color: white;
+    background-color: #4A513F;
+    font-size: 1.4rem;
+}
+
+#logout-lock-options{
+    display: flex; flex-direction: row;
+    align-items: center;
+    height: fit-content;
+    justify-content: center;
+    /* padding-top: 18px; */
+    font-size: 1.3rem;
+    border-top: 5px solid #4A513F;
+    padding-top: 9px;
+    height: fit-content;
+    padding-bottom: 0;
+    padding-bottom:3px;
+}
+
+#logout-lock-options p{
+    margin-bottom: 10px;
+}
+
+#logout:hover, #lock:hover{
+    cursor: pointer;
+    text-decoration: underline;
+} 
+
+button:hover{
+    cursor: pointer;
+}
+
+
+#routine-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 2;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+#blank-routine-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 2;
+    padding-top: 20px;
+    gap: 5px;
+
+    
+}
+
+
+#new-routine-btn{
+    background-color: #4A513F;
+    color: white;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    height: fit-content;
+    font-size: 1.5rem;
+    padding: 15px;
+    padding-right: 50px;
+    border-radius: 15px;
+    margin-top: 25px;
+    position:relative;
+
+    
+}
+
+
+#plus-btn{
+    position: absolute;
+    width: 32px;
+    right: 10px;
+    top:17px;
+}
+
+
+h2{
+    font-family: "Alatsi", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 29.516px;
+    color: rgb(33, 37, 41);
+}

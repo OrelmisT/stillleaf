@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { response } from 'express'
 import cors from 'cors'
 import {dirname, join} from 'path'
 import { fileURLToPath} from 'node:url';
@@ -415,6 +415,42 @@ app.put('/tasks/:id', verifySession_error_msg, async(req, res) =>{
 
     await db.query('update tasks set content = $1, completed = $2', [content, completed])
     res.status(200).json({"message":"task successfully updated"})
+    return
+
+})
+
+app.delete('/routines/:id', verifySession_error_msg, async (req, res) => {
+
+    const routine_id = req.params.id
+    const response = await db.query('select * from routines where id = $1', [routine_id])
+    if(response.rowCount === 0){
+        res.status(404).json({'errorMsg': "The routine does not exist"})
+        return
+    }
+    if(response.rows[0].user_email !== req.session.user.email){
+        res.status(401).json({'errorMsg':'unauthorized'})
+        return
+    }
+    await db.query("delete from routines where id = $1", [routine_id])
+    await db.query("delete from tasks where routine_id = $1", [routine_id])
+    res.status(200).json({"message": "routine and asscociated tasks successfully deleted"})
+    return
+
+})
+
+app.delete('/tasks/:id', verifySession_error_msg, async (req, res) => {
+    const task_id = req.params.id
+    const response = await db.query('select tasks.id, routines.user_email from tasks join routines on tasks.routine_id = routines.id where tasks.id = $1', [task_id])
+    if(response.rowCount === 0){
+        res.status(404).json({'errorMsg': "The task does not exist"})
+        return
+    }
+    if(response.rows[0].user_email === req.session.user.email){
+        res.status(401).json({'errorMsg':'unauthorized'})
+        return
+    }
+    await db.query("delete from tasks where id = $1", [task_id])
+    res.status(200).json({"message": "task successfully deleted"})
     return
 
 })

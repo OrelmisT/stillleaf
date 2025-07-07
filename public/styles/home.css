@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: "Alatsi", sans-serif;
 }
 
 
@@ -186,6 +187,7 @@ nav h1:hover{
     width: 99%;
     position: relative;
     padding-right: 33px;
+    font-family: "Alatsi", sans-serif;
 }
 
 #new-note-sidebar-button{
