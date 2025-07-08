@@ -354,12 +354,12 @@ app.post('/routines', verifySession_error_msg, async (req, res) => {
     const user_email = req.session.user.email
     const {title} = req.body
     const exists_response = await db.query("select exists(select * from routines where user_email = $1 and title = $2)", [user_email, title])
-    if(exists_response.rows[0].exists){
+    if(exists_response.rows[0].exists && title !== ""){
         res.status(409).json({'errorMsg':'A routine with this title already exists'})
         return
     }else{
         const response = await db.query("insert into routines(user_email, title) values ($1, $2) returning *", [user_email, title])
-        res.status(200).json({'message':'routine successfully created', "routine": response.rows[0]})
+        res.status(201).json({'message':'routine successfully created', "routine": response.rows[0]})
         return
     }
 

@@ -383,3 +383,102 @@ h2{
     font-size: 29.516px;
     color: rgb(33, 37, 41);
 }
+
+
+#title-input{
+    display: block;
+    padding: 10px;
+    font-size: 2rem;
+    width: 100%;
+    font-weight: bold;
+    outline: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+}
+
+
+
+
+.routine-li{
+    padding: 5px;
+    height:60px;
+}
+
+.routine-li{
+
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid black;
+    overflow: hidden;
+    align-items: center;
+}
+
+.routine-li-content{
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap:0;
+    padding-left:5px;
+    padding-bottom: 4px;
+    justify-content:center;
+    overflow: hidden;
+    min-height: 30px;
+    max-height: 30px;
+
+   
+}
+
+.routine-li-content p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.2rem;
+    
+   
+
+}
+
+.routine-li[data-selected='false']{
+    background-color: #D9D9D9;
+}
+
+.routine-li[data-selected='true']{
+    background-color: #BBC2AF;
+}
+
+.routine-li:hover{
+    cursor: pointer;
+}
+
+.routine-task-count{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+br{
+    height: 0;
+}
+
+.routine-task-count p{
+    padding: 0;
+    margin: 0;
+
+}
+
+.task-count-num{
+    font-size: 1rem;
+}
+
+.task-count-text{
+    font-size:0.7rem;
+}
