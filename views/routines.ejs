@@ -28,7 +28,18 @@
             <div id="new-routine-button-container">
                     <button id="new-routine-sidebar-button"> New Routine <img src="plus.png" style="width: 20px; margin-left: 5px; transform: translateY(3px);"> </button>      
             </div>
-            <div id="routines-list"></div>
+            <div id="routines-list">
+                <% for(const routine of routines){%>
+                    <div class="routine-li" data-selected="false" data-routine_id="<%=routine.id%>" data-routine_title="<%= routine.title%>">
+                        <div class='routine-li-content' >
+                            <p class='routine-li-title'><%= routine.title ? routine.title : "Untitled" %></p>
+                        </div>
+                        <div class='routine-task-count'>
+                            <p><span class='task-count-num'>0</span> <br> <span class='task-count-text'>tasks left</span></p>
+                        </div>
+                    </div>
+                <%}%>
+            </div>
             <div id="logout-lock-options">
                 <p><span id="logout">Logout</span></p>
             </div>

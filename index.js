@@ -345,9 +345,13 @@ app.post('/password_reset', async (req, res) => {
 })
 
 
-app.get('/routines', verifySession_redirect,(req, res) => {
+app.get('/routines', verifySession_redirect, async (req, res) => {
 
-    res.render('routines.ejs')
+    const response = await db.query("select * from routines where user_email = $1", [req.session.user.email])
+    console.log(response.rows)
+
+
+    res.render('routines.ejs', {"routines":response.rows})
 } )
 
 app.post('/routines', verifySession_error_msg, async (req, res) => {

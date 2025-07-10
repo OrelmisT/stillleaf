@@ -33,6 +33,14 @@ logout_btn.addEventListener("click", (e) => {
 })
 
 
+const animateCreate = (e) =>{
+    initializeRoutine(e.target)
+    e.target.click()
+    document.querySelector('#title-input').focus()
+
+}
+
+
 const createRoutine = async () =>{
     document.querySelector('#search-bar').value = ''
     document.querySelectorAll('.routine-li').forEach((routineli) => routineli.style.display='flex')
@@ -54,26 +62,48 @@ const createRoutine = async () =>{
         `
         document.querySelector('#routines-list').prepend(new_routine)
         new_routine.classList.add('createdItem')
-        // uncomment later
-        // new_routine.addEventListener('animationend', animateCreate)
+        new_routine.addEventListener('animationend', animateCreate)
     } else if(response.status === 401){
         window.location.href = '/login'
     }
 }
 
+const sidebar_new_routine_btn = document.querySelector('#new-routine-sidebar-button').addEventListener('click', createRoutine)
+const big_new_routine_btn = document.querySelector('#new-routine-btn').addEventListener('click', createRoutine)
 
 
 
-// --------------------------------------------------------------------------------------------------------
+let selectedRoutine= undefined
+const initializeRoutine = (routine) =>{
+    routine.addEventListener('click', ()=>{
+        if(routine === selectedRoutine){
+            routine.setAttribute('data-selected', 'false')
+            document.querySelector('#blank-routine-content').style.display = 'flex'
+            document.querySelector('#instantiated-routine-content').style.display = 'none'
+            selectedRoutine = undefined
+        }else{
+            routine.classList.remove('createdItem')
+            routine.removeEventListener('animationend', animateCreate)
+            if(selectedRoutine){
+                selectedRoutine.setAttribute('data-selected', 'false')
+            }
+            routine.setAttribute('data-selected', 'true')
+            selectedRoutine = routine
+            const init_title = routine.dataset.routine_title
 
-const bigNewRoutineBtn = document.querySelector('#new-routine-btn')
-bigNewRoutineBtn.addEventListener('click', ()=>{
-    // alert("hello")
-    const instantiatedView = document.querySelector('#instantiated-routine-content')
-    const uninstantiatedview = document.querySelector('#blank-routine-content')
-    console.log(uninstantiatedview)
-    instantiatedView.style.display = 'flex' 
-    uninstantiatedview.style.display = 'none'
-    createRoutine()
+            document.querySelector('#blank-routine-content').style.display = 'none'
+            document.querySelector('#instantiated-routine-content').style.display = 'block'
+            document.querySelector('#title-input').value= init_title
+            
+        }
 
-})
+    })
+
+}
+
+
+const routines = document.querySelectorAll('.routine-li')
+for(const routine of routines){
+    initializeRoutine(routine)
+}
+
