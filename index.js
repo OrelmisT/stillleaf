@@ -351,7 +351,7 @@ app.get('/routines', verifySession_redirect, async (req, res) => {
     console.log(response.rows)
 
 
-    res.render('routines.ejs', {"routines":response.rows})
+    res.render('routines.ejs', {"routines":response.rows.reverse()})
 } )
 
 app.post('/routines', verifySession_error_msg, async (req, res) => {

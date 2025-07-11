@@ -524,3 +524,8 @@ br{
         padding-bottom:5px;
     }
 }
+
+
+#delete:hover, #new-task:hover, #refresh:hover{
+    cursor: pointer;
+}
