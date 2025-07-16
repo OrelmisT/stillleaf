@@ -526,6 +526,19 @@ br{
 }
 
 
-#delete:hover, #new-task:hover, #refresh:hover{
+#delete:hover, #new-task:hover, #refresh:hover, .task-options, input[type='checkbox']{
     cursor: pointer;
+}
+
+textarea{
+    resize: none;
+}
+
+
+.task-group{
+    display: flex; 
+    flex-direction: row; 
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    padding-left: 15px; 
 }

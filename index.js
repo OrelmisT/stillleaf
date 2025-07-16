@@ -209,7 +209,7 @@ app.get('/logout', (req, res) => {
 
 app.put('/reflections/:id', verifySession_error_msg , async (req, res)=>{
 
-    console.log(req.body)
+    // console.log(req.body)
     
 
     const {email, username} = req.session.user
@@ -275,13 +275,13 @@ app.get('/request_password_reset', (req, res) =>{
 
 app.post('/request_password_reset', async (req, res) => {
 
-    console.log(process.env.EMAIL_USER)
-    console.log(process.env.EMAIL_PASSWORD)
-    console.log('route hit')
+    // console.log(process.env.EMAIL_USER)
+    // console.log(process.env.EMAIL_PASSWORD)
+    // console.log('route hit')
     const email = req.body.email
     const response = await db.query('select * from accounts where email = $1', [email])
     if(response.rowCount === 0){
-        console.log("jeepers creepers")
+        // console.log("jeepers creepers")
 
         res.render('password_reset_request.ejs', {"email":email, errorMessage:"No account with this email exists"})
         return
@@ -297,7 +297,7 @@ app.post('/request_password_reset', async (req, res) => {
         html:`<p>Your password reset link: ${process.env.APP_DOMAIN}/password_reset?token=${token}</p>`
     })
 
-    console.log(info)
+    // console.log(info)
 
     res.render('password_reset_request.ejs', {email_sent: true})
 
@@ -348,10 +348,10 @@ app.post('/password_reset', async (req, res) => {
 app.get('/routines', verifySession_redirect, async (req, res) => {
 
     const response = await db.query("select * from routines where user_email = $1", [req.session.user.email])
-    console.log(response.rows)
+    const response2 = await db.query("select tasks.id as id, tasks.routine_id as routine_id, tasks.content as content, tasks.completed as completed from tasks join routines on routines.id = tasks.routine_id where routines.user_email=$1", [req.session.user.email])
+    
 
-
-    res.render('routines.ejs', {"routines":response.rows.reverse()})
+    res.render('routines.ejs', {"routines":response.rows.reverse(), "tasks":response2.rows})
 } )
 
 app.post('/routines', verifySession_error_msg, async (req, res) => {
@@ -389,7 +389,8 @@ app.put('/routines/:id', verifySession_error_msg, async(req, res) => {
 
 app.post('/routines/:routine_id/tasks', verifySession_error_msg, async(req, res) => {
     const routined_id = req.params.routine_id
-    const {content} = req.body.content
+    console.log(`body: ${req.body.content}`)
+    const {content} = req.body
     const routine_response = await db.query('select * from routines where id = $1', [routined_id])
     if(routine_response.rowCount === 0){
         res.status(404).json({"errorMsg":'routine does not exsit'})
@@ -435,8 +436,8 @@ app.delete('/routines/:id', verifySession_error_msg, async (req, res) => {
         res.status(401).json({'errorMsg':'unauthorized'})
         return
     }
-    await db.query("delete from routines where id = $1", [routine_id])
     await db.query("delete from tasks where routine_id = $1", [routine_id])
+    await db.query("delete from routines where id = $1", [routine_id])
     res.status(200).json({"message": "routine and asscociated tasks successfully deleted"})
     return
 

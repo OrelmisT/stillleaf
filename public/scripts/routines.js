@@ -26,6 +26,21 @@ burgerButton.addEventListener('click', (e) =>{
     }
 })
 
+const tasks = window.tasks
+const task_map = new Map()
+for(const task of tasks){
+    let task_list = task_map.get(task.routine_id)
+    if(!task_list){
+        task_list = []
+        task_map.set(task.routine_id, task_list)
+        console.log(typeof task.routine_id)
+    }
+    task_list.push(task)
+}
+console.log(`total num tasks:${tasks.length}`)
+
+
+
 logout_btn = document.querySelector('#logout')
 logout_btn.addEventListener("click", (e) => {
     localStorage.clear()
@@ -157,6 +172,26 @@ const initializeRoutine = (routine) =>{
 
             }
             document.querySelector('#delete').addEventListener('click', delete_routine)
+
+            let routine_specific_tasks = task_map.get(Number(routine.dataset.routine_id))
+            
+            if(!routine_specific_tasks){
+                routine_specific_tasks = []
+                task_map.set(Number(routine.dataset.routine_id), routine_specific_tasks)
+            }
+            console.log(`routine specific tasks: ${routine_specific_tasks}`)
+            console.log(`number tasks:${routine_specific_tasks.length}`)
+            const task_list = document.querySelector('#task-list')
+
+            task_list.innerHTML = routine_specific_tasks.map(task => 
+                 `<div class='task-group' data-task-id=${task.id}>
+                    <img src="triple-dot.png" class="task-options" style="height: auto; width: 20px;"> 
+                    <input type="checkbox" style="margin-top: 4px;">
+                    <textarea style="outline: none; border: none; flex-grow: 2; padding-left: 10px; padding-top: 2px; font-size: 1rem">${task.content}</textarea>
+                 </div>`
+            ).join('')
+
+            
             
         
         
@@ -198,11 +233,46 @@ document.addEventListener('keyup', (e) => {
     } else if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && selectedRoutine.nextElementSibling){
         selectedRoutine.nextElementSibling.click()
     } else if (e.key === 'Backspace'){
-         if(document.activeElement === document.querySelector('#search-bar')){
+         if(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'){
             return 
          } 
-
+        console.log(document.activeElement.tagName)
        document.querySelector('#delete').click()
     }
         
 });
+
+
+
+const newTaskBtn = document.querySelector('#new-task')
+newTaskBtn.addEventListener('click', async ()=>{
+        const routine_id = selectedRoutine.dataset.routine_id
+        const response = await fetch(`/routines/${routine_id}/tasks`,{ method:"POST", headers:{"Content-Type": 'application/json'}, body:JSON.stringify({content:''})})
+        console.log(response.status)
+        if(response.status === 200){
+            const data = await response.json()
+            const task = data.task
+            const new_task_div = document.createElement('div')
+            new_task_div.classList.add('task-group')
+            new_task_div.setAttribute('data-task_id', task.id)
+            new_task_div.innerHTML = `
+                <img src="triple-dot.png" class="task-options" style="height: auto; width: 20px;"> 
+                <input type="checkbox" style="margin-top: 4px;">
+                <textarea style="outline: none; border: none; flex-grow: 2; padding-left: 10px; padding-top: 2px; font-size: 1rem;">${task.content}</textarea>
+
+            `
+            document.querySelector('#task-list').append(new_task_div)
+            const new_text_area = document.querySelector(`.task-group[data-task_id='${task.id}'] textarea`)
+            new_text_area.style.overflowY = 'hidden'
+            new_text_area.addEventListener('input', ()=>{
+                new_text_area.style.height = 'auto'
+                new_text_area.style.height = new_text_area.scrollHeight + "px"
+
+            })
+            new_text_area.focus()
+
+        }
+
+
+
+})
