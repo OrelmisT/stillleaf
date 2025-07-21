@@ -183,6 +183,7 @@ const initializeReflection = (reflection) =>{
                 const notes_list = document.querySelector('#notes-list')
                 reflection.remove()
                 notes_list.prepend(reflection)
+                reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
 
                 timeout = setTimeout( async() => {
 
@@ -190,13 +191,6 @@ const initializeReflection = (reflection) =>{
                     if(response.status === 401){
                         window.location.href = "/login"
                     }
-                if(response.status === 200 ){
-                    const response_body = await response.json()
-                    if(response_body.message === 'reflection successfully updated'){
-                        // update last_modified_ts on side panel
-                        reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
-                    }   
-                }
             }, 3000)
 
 
