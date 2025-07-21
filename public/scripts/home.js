@@ -9,6 +9,7 @@ const email = document.querySelector('#email').textContent
 // localStorage.setItem('username', username)
 // localStorage.setItem('email', email)
 
+let timeout;
 
 
 // Util func
@@ -171,38 +172,39 @@ const initializeReflection = (reflection) =>{
 
 
             // Set up edit reflection handler (persist)
-            document.querySelector('#title-input').removeEventListener('blur', editPost)
-            document.querySelector('#body-input').removeEventListener('blur', editPost)
+            document.querySelector('#title-input').removeEventListener('input', editPost)
+            document.querySelector('#body-input').removeEventListener('input', editPost)
             editPost = async (e) =>{
+                clearTimeout(timeout)
                 const title = reflection.dataset.reflection_title
                 console.log(`relfection title: ${title}`)
                 const content = reflection.querySelector('.reflection-li-body').textContent
                 const ts = getSQLTimestamp()
-                const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:"PUT", headers:{"Content-Type": 'application/json'},body:JSON.stringify({title:title, content:content,last_modified_time_stamp:ts})})
-                if(response.status === 401){
-                    window.location.href = "/login"
-                }
-                if(response.status === 200 ){
-                    const response_body = await response.json()
-                    if(response_body.message === 'reflection successfully updated'){
-                        // update last_modified_ts on side panel
-                        reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
-                        const notes_list = document.querySelector('#notes-list')
-                        // Move to the top of the list
-                        reflection.remove()
-                        notes_list.prepend(reflection)
+                const notes_list = document.querySelector('#notes-list')
+                reflection.remove()
+                notes_list.prepend(reflection)
+                reflection.querySelector('.reflection-li-last-modified_ts').textContent = `Last modified ${formatToEST(ts)}`
 
+                timeout = setTimeout( async() => {
+
+                    const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:"PUT", headers:{"Content-Type": 'application/json'},body:JSON.stringify({title:title, content:content,last_modified_time_stamp:ts})})
+                    if(response.status === 401){
+                        window.location.href = "/login"
                     }
+            }, 3000)
 
-                }
+
+
             }
-            document.querySelector('#body-input').addEventListener('blur', editPost)
-            document.querySelector('#title-input').addEventListener('blur', editPost)
+            document.querySelector('#body-input').addEventListener('input', editPost)
+            document.querySelector('#title-input').addEventListener('input', editPost)
             
 
             // Setup delete reflection handler (persist)
             document.querySelector('#delete').removeEventListener('click', deletePost)
             deletePost = async (e) =>{
+
+                clearTimeout(timeout)
 
                 const response = await fetch(`/reflections/${reflection.dataset.post_id}`, {method:'DELETE'})
                 if(response.status === 200){
