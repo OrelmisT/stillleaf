@@ -11,6 +11,7 @@ import { RedisStore } from 'connect-redis';
 import { createClient } from 'redis';
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import path from 'node:path';
 
 dotenv.config()
 
@@ -294,7 +295,41 @@ app.post('/request_password_reset', async (req, res) => {
         from:`"Stillleaf" <${process.env.EMAIL_USER}>`,
         to:email,
         subject:"Password Reset Link",
-        html:`<p>Your password reset link: ${process.env.APP_DOMAIN}/password_reset?token=${token}</p>`
+        html:`
+       
+        
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 10px; color: #333; line-height: 1.5;">
+      <div style="display: flex; justify-content: center; width: 100%; align-items: center; gap: 40px; margin-bottom: 20px; margin-left: -50px;">
+        <img src="cid:tree" alt="Stilleaf Logo" style="height: 50px;" />
+        <h1 style="margin: 0; margin-top:5px; margin-left:10px; font-size: 30px;">Stilleaf</h1>
+      </div>
+
+      <div style='padding: 10px; padding-top:0'>
+
+        <p style="font-size: 16px;">Hello ${response.rows[0].username},</p>
+        <p style="font-size: 16px;">We received a request to reset your password.</p>
+        <p style="font-size: 16px;">If you didn't request this, you can safely ignore this message. Otherwise, click the link below to reset your password:</p>
+
+        <div style="margin: 20px 0;">
+            <a href="${process.env.APP_DOMAIN}/password_reset?token=${token}" 
+            style="display: inline-block; padding: 12px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Reset Password
+            </a>
+        </div>
+
+        <p style="font-size: 16px;">Thanks,</p>
+        <p style="font-size: 16px;">The Stilleaf Team</p>
+      </div>
+    </div>
+        
+        `,
+        attachments: [{
+            filename:'tree-green.png',
+            path: path.join(__dirname, 'public/tree-green.png'),
+            cid:'tree'
+        }]
+        
+
     })
 
     console.log(info)
