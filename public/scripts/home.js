@@ -299,3 +299,8 @@ document.querySelector("#search-bar").addEventListener("input", (e) =>{
         }
    })
 })
+
+
+document.querySelector('#page-title').addEventListener('click', ()=>{
+    window.location.href ='/'
+})

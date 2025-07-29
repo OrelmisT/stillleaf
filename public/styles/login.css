@@ -126,6 +126,10 @@ form p:hover{
     border-radius:  30px;
 }
 
+#submit:hover{
+    background-color: #717964;
+}
+
 #noAccount{
     font-family: "Alatsi", sans-serif;
 
@@ -156,4 +160,26 @@ form p:hover{
 
 #close:hover{
     cursor: pointer;
+}
+
+
+.fadeIn{
+    animation-name: fadeIn;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes fadeIn {
+    0%{
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    100%{
+        opacity: 100%;
+        transform: translateY(0);
+    }
+    
 }
