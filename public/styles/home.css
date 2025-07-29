@@ -77,6 +77,10 @@ nav h1:hover{
     
 }
 
+#new-leaf-btn:hover{
+    background-color: #717964;
+}
+
 #plus-btn{
     position: absolute;
     width: 32px;
@@ -161,6 +165,10 @@ nav h1:hover{
     color: white;
     background-color: #4A513F;
     font-size: 1.3rem;
+}
+
+#new-note-sidebar-button:hover{
+    background-color: #717964;;
 }
 
 

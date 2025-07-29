@@ -13,3 +13,7 @@ if(closeBtn){
     })
 }
 
+
+document.querySelector('#page-title').addEventListener('click', ()=>{
+    window.location.href = '/'
+})
