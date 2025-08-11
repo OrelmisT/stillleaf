@@ -193,7 +193,7 @@ app.post('/signup', async (req, res) =>{
         res.render('signup.ejs', {errorMessage:'Something went wrong. Try again later'})
         return
     }
-    const result = await db.query('insert into accounts values($1, $2, $3)', [email, username , password_hash])
+    const result = await db.query('insert into accounts values($1, $2, $3)', [username, email , password_hash])
 
     req.session.user = {username, email}
     res.redirect('/leaves')
