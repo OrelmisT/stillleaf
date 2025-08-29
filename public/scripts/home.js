@@ -52,6 +52,7 @@ const animateCreate = (e) =>{
     initializeReflection(e.target)
     e.target.click()
     document.querySelector('#title-input').focus()
+    close_sidebar()
 
 }
 
@@ -128,6 +129,7 @@ const initializeReflection = (reflection) =>{
            document.querySelector('#blank-note-content').style.display = 'flex'
            document.querySelector('#instantiated-note-content').style.display = 'none'
            selectedReflection = undefined
+           close_sidebar()
         }
         else{
 
@@ -149,7 +151,9 @@ const initializeReflection = (reflection) =>{
             document.querySelector('#blank-note-content').style.display = 'none'
             document.querySelector('#instantiated-note-content').style.display = 'block'
             document.querySelector('#title-input').value= init_title
-            document.querySelector('#body-input').value = init_content  
+            document.querySelector('#body-input').value = init_content 
+            
+            close_sidebar()
 
             // Set up handler to edit sidebar list item title
             document.querySelector('#title-input').removeEventListener('input', editLiTitle)
@@ -224,6 +228,8 @@ const initializeReflection = (reflection) =>{
                         }
                         reflection.remove()
                     })
+
+
                 } else if(response.status === 401){
                     window.location.href = "/login"
                 }
@@ -304,3 +310,41 @@ document.querySelector("#search-bar").addEventListener("input", (e) =>{
 document.querySelector('#page-title').addEventListener('click', ()=>{
     window.location.href ='/'
 })
+
+
+const burger_menu = document.querySelector('#burger-menu')
+burger_menu.addEventListener('click', ()=> {
+    const sidebar = document.querySelector('#side-bar')
+    if(!sidebar.classList.contains('slide-in')){
+        sidebar.classList.add('slide-in')
+        sidebar.classList.remove('slide-out')
+        burger_menu.classList.add('rotate-left')
+        burger_menu.classList.remove('rotate-right')
+    } else{
+        sidebar.classList.add('slide-out')
+        sidebar.classList.remove('slide-in')
+        burger_menu.classList.add('rotate-right')
+        burger_menu.classList.remove('rotate-left')
+    }
+})
+
+window.addEventListener('resize', ()=>{     
+    const sidebar = document.querySelector('#side-bar')
+    if(document.documentElement.clientWidth > 700){
+        sidebar.classList.remove('slide-in')
+        sidebar.classList.remove('slide-out')
+        burger_menu.classList.remove('rotate-left')
+        burger_menu.classList.remove('rotate-right')
+    }
+})
+
+
+const close_sidebar = () =>{
+    const sidebar = document.querySelector('#side-bar')
+    if(sidebar.classList.contains('slide-in')){
+        sidebar.classList.add('slide-out')
+        sidebar.classList.remove('slide-in')
+        burger_menu.classList.add('rotate-right')
+        burger_menu.classList.remove('rotate-left')
+    }
+}

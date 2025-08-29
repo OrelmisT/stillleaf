@@ -12,11 +12,23 @@
     <div id="username" hidden><%= user.username %></div>
     <div id="email" hidden><%= user.email %> </div>
 
-    <nav>
+    <nav style="display: flex; flex-direction:row; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 15px;">
             <img id='tree' src="tree.png">
             <h1 style="display: inline;" id="page-title">Stilleaf</h1>
         </div>
+        <div id="burger-menu">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+
+        </div>
+        <!-- <div id="hamburger-menu" style="background-color: aqua; display: none; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
+            <h1 style="display: inline;" id="page-title">Stilleaf</h1>
+            <div class="bar" style="width: 25px; height: 10px; background-color: white;"></div>
+            <div class="bar" style="width: 25px; height: 10px; background-color: white;"></div>
+            <div class="bar" style="width: 25px; height: 10px; background-color: white;"></div>
+        </div> -->
     </nav>
     <div id="page-content">
         <div id="side-bar">
