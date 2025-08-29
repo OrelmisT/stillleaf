@@ -4,6 +4,9 @@
     box-sizing: border-box;
 }
 
+body, html{
+    overflow:hidden;
+}
 
 
 #container1 h2{
@@ -101,7 +104,9 @@ nav h1:hover{
     border-right: 1px solid black;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100vh - 80px);
+    background-color: white;
+    z-index: 10;
  
 }
 
@@ -189,14 +194,7 @@ nav h1:hover{
     margin-bottom: 10px;
 }
 
-#logout-lock-options{
-    /* transform: translateY(10px); */
-}
-   
 
-/* #logout-lock-options p{
-    display: block;
-} */
 
 #logout:hover, #lock:hover{
     cursor: pointer;
@@ -352,5 +350,114 @@ nav h1:hover{
         height: 80px;
         padding-top: 5px;
         padding-bottom:5px;
+    }
+}
+
+
+
+#burger-menu{
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 35px; 
+    height: 30px; 
+    cursor: pointer;
+}
+
+.bar{
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+}
+
+
+
+
+
+
+
+@media (max-width: 700px){
+   #side-bar{
+    position:absolute;
+    right: 0;
+    transform: translateX(100%);
+    border-left: 1px solid black;
+    border-right: none;
+   }
+   #burger-menu{
+     display: flex;
+   }
+}
+
+
+
+.slide-in{
+    animation-name: slideIn;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+.slide-out{
+    animation-name: slideOut;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes slideIn{
+    0%{
+        transform: translateX(100%);
+    }
+    100%{
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideOut{
+    0%{
+        transform: translateX(0%);
+    }
+    100%{
+        transform: translateX(100%);
+    }
+}
+
+@media (min-width: 701px){
+    #side-bar{
+        transform: translateX(0%);
+    }
+}
+
+
+.rotate-left{
+    animation-name: rotateLeft;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+.rotate-right{
+    animation-name: rotateRight;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes rotateLeft{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(-90deg);
+    }
+}
+@keyframes rotateRight{
+    0%{
+        transform: rotate(-90deg);
+    }
+    100%{
+        transform: rotate(0deg);
     }
 }
