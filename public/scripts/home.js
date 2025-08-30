@@ -348,3 +348,12 @@ const close_sidebar = () =>{
         burger_menu.classList.remove('rotate-left')
     }
 }
+
+document.querySelector('body').addEventListener('click', (e) =>{
+    const sidebar = document.querySelector('#side-bar')
+    
+    if(sidebar.contains(e.target) || burger_menu.contains(e.target)){
+        return
+    }
+    close_sidebar()
+})
