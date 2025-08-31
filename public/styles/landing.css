@@ -5,6 +5,10 @@
     font-family: "Alatsi", sans-serif;
 }
 
+#actions-container{
+    min-height: fit-content;
+}
+
 nav{
     background-color: #4A513F;
     padding: 10px;
@@ -20,6 +24,7 @@ nav{
     padding-left: 20px;
     padding-right: 20px;   
     position: sticky;
+    z-index: 100;
 }
 
 nav h1{
@@ -42,6 +47,7 @@ nav h1:hover{
     display: flex;
     flex-direction: row;
     height: calc(100vh - 80px) ;
+    min-height: fit-content;
 }
 
 #hero h1{
@@ -121,6 +127,7 @@ button:hover{
         flex-direction: column-reverse;
         justify-content: center !important;
         align-items: center !important;
+        padding-bottom: 60px !important;
         
         /* align-items: center;
         text-align: center;
