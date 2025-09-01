@@ -10,9 +10,8 @@
 }
 
 nav{
-    background-color: #4A513F;
-    padding: 10px;
-    color: white;
+     padding: 10px;
+    color: #41623e;
     font-family: "Alatsi", sans-serif;
     font-weight: bold;
     font-style: normal;
@@ -21,25 +20,27 @@ nav{
     gap:15px;
     height: fit-content;
     justify-content: space-between;
-    padding-left: 20px;
+    padding-left: 25px;
     padding-right: 20px;   
-    position: sticky;
-    z-index: 100;
+    padding-top:20px;
+
 }
 
 nav h1{
     font-size: 2.5rem;
     font-weight: bold;
+    cursor: pointer;
+    
 }
 
 nav h1:hover{
     cursor: pointer;
 }
 
-#tree{
+#logo{
     display: inline;
-    height:60px;
-    transform: translateY(-5px);
+    height:50px;
+    transform: translateY(-3px);
   
 }
 
@@ -48,15 +49,17 @@ nav h1:hover{
     flex-direction: row;
     height: calc(100vh - 80px) ;
     min-height: fit-content;
+    /* gap: 20px; */
 }
 
 #hero h1{
     font-size: 5rem;
+    color: #253b23;
 }
 
 #hero p{
     font-size: 2rem;
-    color: #4A513F;
+    color: #50784d;;
 }
 
 .hero-btn{
@@ -92,7 +95,11 @@ button:hover{
 }
 
 #hero img{
-    width: 500px;
+    width: 400px;
+}
+
+#leaf-container{
+    padding-left: 50px;
 }
 
 
@@ -119,10 +126,38 @@ button:hover{
 
 @media (max-width: 900px) {
 
+    
+
     *{
         margin: 0 !important;
     padding: 0 !important;
+    
     }
+
+
+    nav{
+     padding: 10px;
+    color: #41623e;
+    font-family: "Alatsi", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    gap:15px;
+    height: fit-content;
+    justify-content: space-between;
+    padding-left: 25px;
+    padding-right: 20px;   
+    padding-top:20px;
+
+}
+
+nav h1{
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    
+}
     #hero{
         flex-direction: column-reverse;
         justify-content: center !important;
@@ -139,25 +174,24 @@ button:hover{
     #leaf-container{
         padding: 0 !important;
         margin: 0 !important;
-        background-color: red;
         width: fit-content;
         border: none;
     }
 
     #hero img{
-    width: 350px;
+    width: 200px;
     padding:0;
     margin: 0;
-    background-color: red;
    
     }
     #hero h1{
-        font-size: 3rem;
+        font-size: 2.5rem;
         text-align: center;
         margin-top: 10px  !important;
     }
     #hero p{
         font-size: 1.5rem;
+        max-width: 400px;
     }
     .hero-btn{
         font-size: 2rem;
@@ -179,4 +213,34 @@ button:hover{
 
 
     }
+
+    br{
+        display: none;
+    }
+
+
+    #link-buttons{
+    gap:20px !important;
+    }
+}
+
+
+@media (max-width: 400px){
+
+    #hero p{
+        font-size: 1.2rem;
+        max-width: 300px;
+    }
+    #link-buttons{
+    gap:10px !important;
+    flex-direction: column !important;
+    }
+/* 
+    #link-buttons a{
+        padding-left: 300px !important;
+        padding-right: 300px !important;
+    } */
+   
+
+    
 }
