@@ -108,7 +108,7 @@ nav h1:hover{
     border-right: 1px solid black;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 80px);
+    height: calc(100dvh - 80px);
     background-color: white;
     z-index: 10;
  
