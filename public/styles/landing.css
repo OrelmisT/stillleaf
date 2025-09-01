@@ -234,13 +234,7 @@ nav h1{
     #link-buttons{
     gap:10px !important;
     flex-direction: column !important;
-    }
-/* 
-    #link-buttons a{
-        padding-left: 300px !important;
-        padding-right: 300px !important;
-    } */
-   
+    }   
 
     
 }
