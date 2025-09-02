@@ -6,9 +6,9 @@
 
 body, html{
  overflow-x: hidden;
-  overscroll-behavior-x: none;
+   overscroll-behavior-x: none;
   position: relative;
-  max-width: 100%;
+  max-width: 100%; 
     
 }
 
