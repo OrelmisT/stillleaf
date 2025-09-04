@@ -300,7 +300,7 @@ app.post('/request_password_reset', async (req, res) => {
         
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 10px; color: #333; line-height: 1.5;">
       <div style="display: flex; justify-content: center; width: 100%; align-items: center; gap: 40px; margin-bottom: 20px; margin-left: -50px;">
-        <img src="cid:tree" alt="Stilleaf Logo" style="height: 50px;" />
+        <img src="cid:logo" alt="Stilleaf Logo" style="height: 40px; margin-top:5px;" />
         <h1 style="margin: 0; margin-top:5px; margin-left:10px; font-size: 30px;">Stilleaf</h1>
       </div>
 
@@ -325,8 +325,8 @@ app.post('/request_password_reset', async (req, res) => {
         `,
         attachments: [{
             filename:'tree-green.png',
-            path: path.join(__dirname, 'public/tree-green.png'),
-            cid:'tree'
+            path: path.join(__dirname, 'public/still_leaf_logo.png'),
+            cid:'logo'
         }]
         
 
