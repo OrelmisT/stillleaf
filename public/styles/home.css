@@ -43,6 +43,7 @@ nav{
 nav h1{
     font-size: 2.5rem;
     font-weight: bold;
+    transform: translateY(5px);
 }
 
 nav h1:hover{
@@ -64,8 +65,8 @@ nav h1:hover{
     cursor: pointer;
 }
 
-#leaf{
-    margin-top: 20px;
+#logo{
+    width: 50px;
 }
 #new-leaf-btn{
     background-color: #4A513F;
@@ -392,8 +393,10 @@ nav h1:hover{
    }
    #burger-menu{
      display: flex;
+     width: 35px; 
+    height: 30px;
    }
-
+   
 
    
 }
@@ -403,9 +406,56 @@ nav h1:hover{
     body{
         background-color: red;
     }
-    #leaf{
-        height: 300px !important;
+    #logo{
+        width: 40px;
     }
+
+    nav h1{
+    font-size: 1.65rem;
+    font-weight: bold;
+    transform: translateY(5px);
+ }
+
+
+ #burger-menu{
+    width: 30px; 
+    height: 25px;
+   }
+
+   .bar{
+    height: 4px;
+   }
+
+
+   #burger-menu:active::after {
+  
+  position: absolute;
+  width: 45px !important;
+  height: 45px !important;
+  
+}
+
+
+#leaf{
+    height: 350px !important;
+}
+
+ /* #burger-menu{
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 35px; 
+    height: 30px; 
+    cursor: pointer;
+    position: relative;
+} */
+
+/* .bar{
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+} */
 }
 
 
@@ -519,3 +569,4 @@ nav h1:hover{
   transform: translate(-50%, -50%) scale(1);
   opacity: 0.5;
 } */
+
