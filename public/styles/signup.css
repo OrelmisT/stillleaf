@@ -74,6 +74,7 @@ form{
     padding-left: 50px;
     padding-right: 50px;
     box-shadow: 5px 5px #8D8D8D;
+    max-width: 85vw;
 
 }
 
@@ -88,6 +89,7 @@ form h1{
     display: flex;
     flex-direction: column;
     gap:20px;
+    max-width: 100%;
 }
 
 .inputs input{
@@ -98,6 +100,7 @@ form h1{
     border:none;
     color: #7D7D7D;
     font-weight: 790;
+    max-width: 100%;
 
 }
 
@@ -178,4 +181,12 @@ form p:hover{
         transform: translateY(0);
     }
     
+}
+
+
+@media (max-width: 400px){
+    form{
+        padding-left: 20px;
+        padding-right:20px;
+    }
 }
