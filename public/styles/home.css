@@ -293,9 +293,7 @@ nav h1:hover{
     outline: none;
     resize: none;
     /* height: auto; */
-
-    /* min height is viewport height minus nav height  */
-    min-height: 100vh;
+    min-height: 800px;
     field-sizing: content;
     padding-bottom: 20px;
 }
